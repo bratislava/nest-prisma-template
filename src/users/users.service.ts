@@ -20,14 +20,15 @@ export class UsersService {
   }
 
   async getUser(id: string): Promise<User | null> {
-    return await this.prisma.user.findUnique({
+    const users = await this.prisma.user.findUnique({
       where: {
         id: id,
       },
     });
+    return users;
   }
 
-  private static prepareQuery(queryParamsDto?: QueryParamsDto) {
+  private prepareQuery(queryParamsDto?: QueryParamsDto) {
     if (
       !queryParamsDto ||
       !isString(queryParamsDto.sortBy) ||
@@ -39,7 +40,7 @@ export class UsersService {
       };
     }
 
-    return {
+    const query = {
       where: {
         name: queryParamsDto.name,
         createdAt: {},
@@ -49,5 +50,7 @@ export class UsersService {
       },
       take: 20,
     };
+
+    return query;
   }
 }

@@ -2,7 +2,18 @@
 
 Starting template for nest-prisma development under the city of Bratislava.
 
-## Installation
+## Quick run
+
+If you want to quickly run an application without installing it locally, you can run it trought `docker-compose`:
+```bash
+$ docker-compose up --build
+```
+
+
+
+
+
+## Local installation
 
 - Run npm installation for dependencies
 
@@ -64,6 +75,21 @@ npx prisma migrate dev --name init
 ```
 This prisma migrate dev command generates SQL files and directly runs them against the database. In this case, the following migration files was created in the existing prisma directory:
 
+
+## Docker
+
+
+To build image for development run:
+
+```bash
+$ docker build --target dev .
+```
+
+and for production run:
+
+```bash
+$ docker build --target prod .
+```
 
 ## Test
 

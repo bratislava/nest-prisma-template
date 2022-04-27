@@ -27,7 +27,7 @@ export class UsersController {
     description: 'Obtain list of user ids',
   })
   @ApiBadRequestResponse({
-    description: 'Bad request, missing/incorrect query params',
+    description: 'Bad request - incorrect query params',
   })
   @Get()
   findAll(@Query() queryParamsDto?: QueryParamsDto): Promise<IdDto[]> {
@@ -38,7 +38,7 @@ export class UsersController {
     summary: 'Get info about user by its id',
   })
   @ApiBadRequestResponse({
-    description: 'Bad request, missing/incorrect query params',
+    description: 'Bad request - incorrect query params',
   })
   @ApiNotFoundResponse({
     description: 'No user found for the user id ',
