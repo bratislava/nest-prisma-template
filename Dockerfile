@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install git
 
 WORKDIR /root/app
 COPY package*.json ./
+COPY prisma ./prisma/
 
 RUN npm ci
 

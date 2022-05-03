@@ -132,7 +132,7 @@ If you are authetificated in docker registry, we can continue with image prepara
 Based on your preference you can decide which image you would like ot build (dev or production).
 
 ```bash
-$ docker build -t harbor.bratislava.sk/standalone/nest-prisma-template:1.0 --target dev . 
+$ docker build -t harbor.bratislava.sk/standalone/nest-prisma-template:1.0 --target prod . 
 ```
 
 Push image to harbor
@@ -141,6 +141,17 @@ Push image to harbor
 $ docker push harbor.bratislava.sk/standalone/nest-prisma-template:1.0
 ```
 
+### Prepare Kustomize file
+
+If you don`t have Kustomize, please install it:
+
+```bash
+$ brew install kustomize
+```
+
+```bash
+ kustomize build --load-restrictor LoadRestrictionsNone kubernetes/envs/Dev | envsubst > manifest.yml
+```
 
 
 ## Pipelines

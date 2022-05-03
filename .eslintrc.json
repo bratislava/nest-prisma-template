@@ -1,0 +1,95 @@
+{
+  "root": true,
+  "ignorePatterns": ["**/*"],
+  "extends": [
+    "plugin:prettier/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "plugins": ["@nrwl/nx"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "rules": {
+        "@nrwl/nx/enforce-module-boundaries": [
+          "error",
+          {
+            "enforceBuildableLibDependency": true,
+            "allow": [],
+            "depConstraints": [
+              {
+                "sourceTag": "technology:next",
+                "onlyDependOnLibsWithTags": [
+                  "technology:next",
+                  "technology:react",
+                  "technology:common"
+                ]
+              },
+              {
+                "sourceTag": "technology:react",
+                "onlyDependOnLibsWithTags": [
+                  "technology:react",
+                  "technology:common"
+                ]
+              },
+              {
+                "sourceTag": "technology:nest",
+                "onlyDependOnLibsWithTags": [
+                  "technology:nest",
+                  "technology:common"
+                ]
+              },
+              {
+                "sourceTag": "technology:strapi",
+                "onlyDependOnLibsWithTags": [
+                  "technology:strapi",
+                  "technology:react",
+                  "technology:common"
+                ]
+              },
+              {
+                "sourceTag": "technology:common",
+                "onlyDependOnLibsWithTags": ["technology:common"]
+              },
+              {
+                "sourceTag": "platform:server",
+                "onlyDependOnLibsWithTags": [
+                  "platform:server",
+                  "platform:common"
+                ]
+              },
+              {
+                "sourceTag": "platform:web",
+                "onlyDependOnLibsWithTags": ["platform:web", "platform:common"]
+              },
+              {
+                "sourceTag": "platform:mobile",
+                "onlyDependOnLibsWithTags": [
+                  "platform:mobile",
+                  "platform:common"
+                ]
+              },
+              {
+                "sourceTag": "platform:common",
+                "onlyDependOnLibsWithTags": ["platform:common"]
+              }
+            ]
+          }
+        ],
+        "import/no-unresolved": "off",
+        "jsx-a11y/no-onchange": "off"
+      }
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nrwl/nx/typescript"],
+      "rules": {}
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nrwl/nx/javascript"],
+      "rules": {}
+    }
+  ]
+}

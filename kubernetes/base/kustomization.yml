@@ -6,8 +6,7 @@ resources:
   - statefulSet.yml
   - service-db.yml
   # Add any secrets here
-  - ./secrets/db.secret.yml
-  - ./secrets/secret.yml
+  - ./secrets/database.secret.yml
 configurations:
   - configuration.yml
 
