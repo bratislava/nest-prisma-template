@@ -87,11 +87,18 @@ function get_current_commit(): Bash {
   return { res: result.stdout.trim(), err: result.stderr };
 }
 
-function git_check_commit_remote(commit: string): Bash {
+function git_check_commit_remote4(commit: string): Bash {
   const result = cp.spawnSync('git', ['branch', '-r', `--contains=${commit}`], {
     encoding: 'utf8',
   });
   return { res: result.stdout.trim(), err: result.stderr };
+}
+
+function git_check_commit_remote(commit: string) {
+  const result = execSync(`git log origin/master | grep ${commit}`, {
+    encoding: 'utf8',
+  });
+  return result;
 }
 
 function get_current_status(): Bash {
@@ -273,11 +280,9 @@ try {
   }
 
   const remote_commit_bash = git_check_commit_remote(options.commit);
-  if (remote_commit_bash.err !== '') {
-    throw new Error('There was an issue checking if remote commit exists!');
-  }
+
   options.merged = false;
-  if (remote_commit_bash.res !== '') {
+  if (remote_commit_bash === `commit ${options.commit}`) {
     options.merged = true;
   }
   ok();
