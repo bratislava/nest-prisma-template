@@ -37,6 +37,7 @@ commonAnnotations:
   image: ${IMAGE}
 
 configMapGenerator:
-- name: ${BUILD_REPOSITORY_NAME}-env
+- name: env
+  namespace: ${NAMESPACE}
   envs:
   - .env

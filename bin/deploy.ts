@@ -448,7 +448,7 @@ try {
   const image = check_docker_image(options);
   if (image.err !== '') {
     throw new Error(
-      `There was an issue creating docker image! Check above docker build log - stage (5).`,
+      `There was an issue creating docker image! Check above docker build log.`,
     );
   }
   const res_json = image.res;
@@ -494,7 +494,6 @@ try {
   apply_to_kubernetes(manifest_path);
   finished();
 
-  /*
   line('(13) Cleaning manifest...');
   try {
     fs.unlinkSync(manifest_path);
@@ -502,8 +501,6 @@ try {
     throw new Error(`We had an error by cleaning manifest file`);
   }
   ok();
-
-  */
 } catch (e: any) {
   log('');
   log('\x1b[31m', e.message);
