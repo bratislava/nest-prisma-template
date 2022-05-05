@@ -124,7 +124,7 @@ function get_cluster(): Bash {
   const result = cp.spawnSync('kubectl', ['config', 'current-context'], {
     encoding: 'utf8',
   });
-  return { res: result.stdout, err: result.stderr };
+  return { res: result.stdout.trim(), err: result.stderr };
 }
 
 function get_pods(): Bash {
@@ -135,14 +135,14 @@ function get_pods(): Bash {
       encoding: 'utf8',
     },
   );
-  return { res: result.stdout, err: result.stderr };
+  return { res: result.stdout.trim(), err: result.stderr };
 }
 
 function get_docker(): Bash {
   const result = cp.spawnSync('docker', ['-v'], {
     encoding: 'utf8',
   });
-  return { res: result.stdout, err: result.stderr };
+  return { res: result.stdout.trim(), err: result.stderr };
 }
 
 function docker_build(options: any) {
@@ -163,7 +163,7 @@ function check_docker_image(options: any) {
       encoding: 'utf8',
     },
   );
-  return { res: result.stdout, err: result.stderr };
+  return { res: result.stdout.trim(), err: result.stderr };
 }
 
 function push_docker_image(options: any) {
@@ -180,7 +180,7 @@ function check_image_in_registry(options: any) {
       encoding: 'utf8',
     },
   );
-  return { res: result.stdout, err: result.stderr };
+  return { res: result.stdout.trim(), err: result.stderr };
 }
 
 function build_kustomize_manifest(options: any) {
@@ -255,14 +255,12 @@ try {
     throw new Error('There was an issue fetching changes from git origin!');
   }
   options.fetch = fetch_bash.res;
-  console.log('fetch' + fetch_bash);
 
   const commit_bash = get_current_commit();
   if (commit_bash.err !== '') {
     throw new Error('There was an issue getting commit!');
   }
   options.commit = commit_bash.res;
-  console.log(options.commit);
 
   const status_bash = get_current_status();
   if (status_bash.err !== '') {
@@ -278,13 +276,15 @@ try {
   if (remote_commit_bash.err !== '') {
     throw new Error('There was an issue checking if remote commit exists!');
   }
-  console.log(remote_commit_bash);
-
+  options.merged = false;
+  if (status_bash.res === '') {
+    options.merged = true;
+  }
   ok();
 
   line('(1) Checking current kubernetes cluster...');
   const response_cluster = get_cluster();
-  const cluster = response_cluster.res;
+  options.cluster = response_cluster.res;
   if (response_cluster.err !== '') {
     throw new Error(
       'There is no kubernetes context available. Please log in to kubernetes cluster! \n More info: ' +
@@ -297,28 +297,33 @@ try {
   const pods = get_pods();
   if (pods.err !== '') {
     throw new Error(
-      `Kubernetes cluster ${cluster} is not reachable from your computer! Maybe turn on VPN or check internet connection or sign in to cluster.`,
+      `Kubernetes cluster ${options.cluster} is not reachable from your computer! Maybe turn on VPN or check internet connection or sign in to cluster.`,
     );
   }
   ok();
 
   line('(3) Checking chosen kubernetes cluster with enviroment...');
   if (typeof options.env === 'undefined') {
-    options.env = map_cluster_to_env(cluster);
-  } else if (options.env != map_cluster_to_env(cluster)) {
-    const cluster_env = map_cluster_to_env(cluster);
+    options.env = map_cluster_to_env(options.cluster);
+  } else if (options.env != map_cluster_to_env(options.cluster)) {
+    const cluster_env = map_cluster_to_env(options.cluster);
     throw new Error(
-      `Your kubernetes context "${cluster}" (${cluster_env}) do not match chosen context (${options.env})! Change with --env or kubernetes cluster context!`,
+      `Your kubernetes context "${options.cluster}" (${cluster_env}) do not match chosen context (${options.env})! Change with --env or kubernetes cluster context!`,
     );
   }
-  if (options.env === 'tkg-innov-prod') {
+  if (options.cluster === 'tkg-innov-prod') {
     if (options.untracked === true) {
       throw new Error(
         `You cannot deploy to 'tkg-innov-prod' when you have untracked changes. Please commit and PR merge your changes to master!`,
       );
     }
+    if (options.merged === false) {
+      throw new Error(
+        `You cannot deploy to 'tkg-innov-prod' when the changes are not merged in 'master' branch. Please create PR to propagate your changes to master!`,
+      );
+    }
   }
-  line(` we will use ${cluster}...`);
+  line(` we will use ${options.cluster}...`);
   ok();
 
   if (typeof options.host === 'undefined') {
