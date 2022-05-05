@@ -277,7 +277,7 @@ try {
     throw new Error('There was an issue checking if remote commit exists!');
   }
   options.merged = false;
-  if (status_bash.res !== '') {
+  if (remote_commit_bash.res !== '') {
     options.merged = true;
   }
   ok();
