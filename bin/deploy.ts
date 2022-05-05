@@ -73,8 +73,22 @@ function get_repository_url(): Bash {
   return { res: result.stdout.trim(), err: result.stderr };
 }
 
+function git_fetch_origin(): Bash {
+  const result = cp.spawnSync('git', ['fetch', 'origin'], {
+    encoding: 'utf8',
+  });
+  return { res: result.stdout.trim(), err: result.stderr };
+}
+
 function get_current_commit(): Bash {
   const result = cp.spawnSync('git', ['rev-parse', 'HEAD'], {
+    encoding: 'utf8',
+  });
+  return { res: result.stdout.trim(), err: result.stderr };
+}
+
+function git_check_commit_remote(commit: string): Bash {
+  const result = cp.spawnSync('git', ['branch', '-r', `--contains=${commit}`], {
     encoding: 'utf8',
   });
   return { res: result.stdout.trim(), err: result.stderr };
@@ -207,6 +221,7 @@ try {
       'harbor.bratislava.sk',
     )
     .option('-v, --version <version>', 'Image version')
+    .option('--H, --help', 'Help user guide')
     .parse();
   const options = program.opts();
 
@@ -223,21 +238,48 @@ try {
   }
 
   line('(0) Checking git...');
-  const repository_url = get_repository_url();
   const pwd_bash = get_pwd();
-  const commit_bash = get_current_commit();
-  const status_bash = get_current_status();
+  if (pwd_bash.err !== '') {
+    throw new Error('There was an issue getting current working directory!');
+  }
+  options.pwd = pwd_bash.res;
+
+  const repository_url = get_repository_url();
   if (repository_url.err !== '') {
     throw new Error('You are running this CLI where is no git installed!');
   }
   options.repository_uri = repository_url.res;
+
+  const fetch_bash = git_fetch_origin();
+  if (fetch_bash.err !== '') {
+    throw new Error('There was an issue fetching changes from git origin!');
+  }
+  options.fetch = fetch_bash.res;
+  console.log('fetch' + fetch_bash);
+
+  const commit_bash = get_current_commit();
+  if (commit_bash.err !== '') {
+    throw new Error('There was an issue getting commit!');
+  }
   options.commit = commit_bash.res;
-  options.pwd = pwd_bash.res;
+  console.log(options.commit);
+
+  const status_bash = get_current_status();
+  if (status_bash.err !== '') {
+    throw new Error('There was an issue getting git status!');
+  }
   options.untracked = false;
   if (status_bash.res !== '') {
     options.untracked = true;
     line('\nWe have untracked changes in repo, adding tag "untracked"...');
   }
+
+  const remote_commit_bash = git_check_commit_remote(options.commit);
+  if (remote_commit_bash.err !== '') {
+    throw new Error('There was an issue checking if remote commit exists!');
+  }
+  console.log(remote_commit_bash);
+
   ok();
 
   line('(1) Checking current kubernetes cluster...');
@@ -268,6 +310,13 @@ try {
     throw new Error(
       `Your kubernetes context "${cluster}" (${cluster_env}) do not match chosen context (${options.env})! Change with --env or kubernetes cluster context!`,
     );
+  }
+  if (options.env === 'tkg-innov-prod') {
+    if (options.untracked === true) {
+      throw new Error(
+        `You cannot deploy to 'tkg-innov-prod' when you have untracked changes. Please commit and PR merge your changes to master!`,
+      );
+    }
   }
   line(` we will use ${cluster}...`);
   ok();
