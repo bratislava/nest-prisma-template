@@ -302,9 +302,8 @@ try {
     options.commit,
     options.branch,
   );
-  console.log(remote_commit_bash);
   options.merged = false;
-  if (remote_commit_bash.err !== '' && remote_commit_bash.res === '') {
+  if (remote_commit_bash.err !== '') {
     options.merged = true;
   }
   ok();
