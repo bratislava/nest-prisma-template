@@ -99,10 +99,14 @@ function git_check_commit_remote(commit: string, branch?: string) {
     branch = 'master';
   }
 
-  const result = execSync(`git log origin/${branch} | grep ${commit}`, {
-    encoding: 'utf8',
-  });
-  return result.trim();
+  const result = cp.spawnSync(
+    'git',
+    ['branch', `--contains=${commit}`, `--points-at=origin/${branch}`],
+    {
+      encoding: 'utf8',
+    },
+  );
+  return { res: result.stdout.trim(), err: result.stderr };
 }
 
 function get_current_status(): Bash {
@@ -299,7 +303,7 @@ try {
     options.branch,
   );
   options.merged = false;
-  if (remote_commit_bash === `commit ${options.commit}`) {
+  if (remote_commit_bash.err !== '' && remote_commit_bash.res === '') {
     options.merged = true;
   }
   ok();
@@ -358,6 +362,7 @@ try {
           `You cannot deploy to 'tkg-innov-staging' when you have untracked changes. Please commit and push changes to you branch origin/${options.branch}!`,
         );
       }
+
       if (options.merged === false) {
         throw new Error(
           `You cannot deploy to 'tkg-innov-staging' when the changes are not pushed in branch origin/${options.branch}. Please push your changes!`,
