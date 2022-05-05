@@ -87,18 +87,22 @@ function get_current_commit(): Bash {
   return { res: result.stdout.trim(), err: result.stderr };
 }
 
-function git_check_commit_remote4(commit: string): Bash {
-  const result = cp.spawnSync('git', ['branch', '-r', `--contains=${commit}`], {
+function get_current_branch(): Bash {
+  const result = cp.spawnSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], {
     encoding: 'utf8',
   });
   return { res: result.stdout.trim(), err: result.stderr };
 }
 
-function git_check_commit_remote(commit: string) {
-  const result = execSync(`git log origin/master | grep ${commit}`, {
+function git_check_commit_remote(commit: string, branch?: string) {
+  if (typeof branch === 'undefined') {
+    branch = 'master';
+  }
+
+  const result = execSync(`git log origin/${branch} | grep ${commit}`, {
     encoding: 'utf8',
   });
-  return result;
+  return result.trim();
 }
 
 function get_current_status(): Bash {
@@ -251,11 +255,21 @@ try {
   }
   options.pwd = pwd_bash.res;
 
-  const repository_url = get_repository_url();
-  if (repository_url.err !== '') {
-    throw new Error('You are running this CLI where is no git installed!');
+  const branch_bash = get_current_branch();
+  if (branch_bash.err !== '') {
+    throw new Error(
+      'There was an issue optaining git branch name! Do you have git installed?',
+    );
   }
-  options.repository_uri = repository_url.res;
+  options.branch = branch_bash.res;
+
+  const repository_bash = get_repository_url();
+  if (repository_bash.err !== '') {
+    throw new Error(
+      'There was an issue getting remote repository url. Please push your changes to github or azure.',
+    );
+  }
+  options.repository_uri = repository_bash.res;
 
   const fetch_bash = git_fetch_origin();
   if (fetch_bash.err !== '') {
@@ -273,13 +287,17 @@ try {
   if (status_bash.err !== '') {
     throw new Error('There was an issue getting git status!');
   }
+
   options.untracked = false;
   if (status_bash.res !== '') {
     options.untracked = true;
     line('\nWe have untracked changes in repo, adding tag "untracked"...');
   }
 
-  const remote_commit_bash = git_check_commit_remote(options.commit);
+  const remote_commit_bash = git_check_commit_remote(
+    options.commit,
+    options.branch,
+  );
   options.merged = false;
   if (remote_commit_bash === `commit ${options.commit}`) {
     options.merged = true;
@@ -315,18 +333,39 @@ try {
       `Your kubernetes context "${options.cluster}" (${cluster_env}) do not match chosen context (${options.env})! Change with --env or kubernetes cluster context!`,
     );
   }
-  if (options.cluster === 'tkg-innov-prod') {
-    if (options.untracked === true) {
-      throw new Error(
-        `You cannot deploy to 'tkg-innov-prod' when you have untracked changes. Please commit and PR merge your changes to master!`,
-      );
-    }
-    if (options.merged === false) {
-      throw new Error(
-        `You cannot deploy to 'tkg-innov-prod' when the changes are not merged in 'master' branch. Please create PR to propagate your changes to master!`,
-      );
-    }
+
+  switch (options.cluster) {
+    case 'tkg-innov-prod':
+      if (options.untracked === true) {
+        throw new Error(
+          `You cannot deploy to 'tkg-innov-prod' when you have untracked changes. Please commit and PR merge your changes to master!`,
+        );
+      }
+      if (options.branch !== 'master') {
+        throw new Error(
+          `Please checkout git branch to master. Run 'git checkout master'`,
+        );
+      }
+      if (options.merged === false) {
+        throw new Error(
+          `You cannot deploy to 'tkg-innov-prod' when the changes are not merged in 'master' branch. Please create PR to propagate your changes to master!`,
+        );
+      }
+      break;
+    case 'tkg-innov-staging':
+      if (options.untracked === true) {
+        throw new Error(
+          `You cannot deploy to 'tkg-innov-staging' when you have untracked changes. Please commit and push changes to you branch origin/${options.branch}!`,
+        );
+      }
+      if (options.merged === false) {
+        throw new Error(
+          `You cannot deploy to 'tkg-innov-staging' when the changes are not pushed in branch origin/${options.branch}. Please push your changes!`,
+        );
+      }
+      break;
   }
+
   line(` we will use ${options.cluster}...`);
   ok();
 
