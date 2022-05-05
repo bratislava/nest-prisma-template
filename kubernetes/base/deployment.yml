@@ -17,6 +17,7 @@ spec:
       containers:
         - image: ${IMAGE}:${TAG}
           name: app
+          imagePullPolicy: IfNotPresent
           resources:
             limits:
               cpu: 500m
@@ -26,10 +27,12 @@ spec:
               memory: 64Mi
           envFrom:
             - secretRef:
-                name: nest-prisma-template-database-secret
+                name: ${BUILD_REPOSITORY_NAME}-database-secret
             - configMapRef:
-                name: env
+                name: ${BUILD_REPOSITORY_NAME}-env
           readinessProbe:
             httpGet:
               path: /
               port: 80
+      imagePullSecrets:
+        - name: ${IMAGE_PULL_SECRET}

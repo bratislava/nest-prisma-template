@@ -32,8 +32,11 @@ commonLabels:
 
 commonAnnotations:
   repositoryUrl: ${BUILD_REPOSITORY_URI}
+  commit: ${COMMIT}
+  tag: ${TAG}
+  image: ${IMAGE}
 
 configMapGenerator:
-- name: env
+- name: ${BUILD_REPOSITORY_NAME}-env
   envs:
   - .env

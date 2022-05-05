@@ -2,7 +2,7 @@ resources:
   - ../../base
 
 configMapGenerator:
-- name: env
+- name: ${BUILD_REPOSITORY_NAME}-env
   behavior: merge
   envs:
   - .env

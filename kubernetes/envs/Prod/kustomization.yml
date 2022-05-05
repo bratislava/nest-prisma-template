@@ -1,11 +1,8 @@
 resources:
   - ../../base
 
-patchesStrategicMerge:
-  - ../../base/secrets/prod.secret.yml
-
 configMapGenerator:
-- name: env
+- name: ${BUILD_REPOSITORY_NAME}-env
   behavior: merge
   envs:
   - .env
