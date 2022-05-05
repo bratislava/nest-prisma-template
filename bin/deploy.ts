@@ -280,7 +280,6 @@ try {
   }
 
   const remote_commit_bash = git_check_commit_remote(options.commit);
-
   options.merged = false;
   if (remote_commit_bash === `commit ${options.commit}`) {
     options.merged = true;
