@@ -3,8 +3,8 @@ resources:
   - service-app.yml
   - ingress.yml
   # Comment-out these lines if no database is used
-  - statefulSet.yml
-  - service-db.yml
+  - stateful-set.yml
+  - service-database.yml
   # Add any secrets here
   - ./secrets/database.secret.yml
 configurations:

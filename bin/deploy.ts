@@ -209,6 +209,13 @@ function check_docker_image(options: any) {
   return { res: result.stdout.trim(), err: result.stderr };
 }
 
+function delete_docker_image(options: any) {
+  const result = cp.spawnSync('docker', ['image', `rm`, image_tag(options)], {
+    encoding: 'utf8',
+  });
+  return { res: result.stdout.trim(), err: result.stderr };
+}
+
 function push_docker_image(options: any) {
   cp.spawnSync('docker', ['push', image_tag(options)], {
     stdio: 'inherit',
@@ -520,10 +527,23 @@ try {
   const image_r = check_image_in_registry(options);
   if (image_r.err !== '') {
     throw new Error(
-      `There was an issue pushing docker image to registry! Propably you are unauthorised. Check above docker push log - stage (7).`,
+      `There was an issue pushing docker image to registry! Propably you are unauthorised. Check above docker push log`,
     );
   }
   ok();
+
+  if (!options.debug) {
+    line('(11) Cleaning local docker image...');
+    const image_r = delete_docker_image(options);
+    if (image_r.err !== '') {
+      throw new Error(
+        `There was an issue cleaning local docker image with tag ${image_tag(
+          options,
+        )}`,
+      );
+    }
+    ok();
+  }
 
   line('(12) Creating env variables for kustomize...');
   assign_env_vars(options);

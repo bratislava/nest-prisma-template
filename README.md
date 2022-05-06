@@ -71,6 +71,8 @@ $ npx prisma migrate dev --name init
 ```
 This prisma migrate dev command generates SQL files and directly runs them against the database. In this case, the following migration files was created in the existing prisma directory:
 
+For deployment we are using prisma schema with name `schema.deployment.prisma`which has specified build target to our kubernetes server.
+
 ## Test
 
 To run tests in the repo plese use these commands:
