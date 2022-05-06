@@ -32,7 +32,7 @@ spec:
               subPath: postgresql
           envFrom:
             - secretRef:
-                name: ${BUILD_REPOSITORY_NAME}-database-secret
+                name: database-secret
   # Volume Claim
   volumeClaimTemplates:
     - metadata:

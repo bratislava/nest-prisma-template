@@ -27,12 +27,12 @@ spec:
               memory: 64Mi
           envFrom:
             - secretRef:
-                name: ${BUILD_REPOSITORY_NAME}-database-secret
+                name: database-secret
             - configMapRef:
-                name: ${BUILD_REPOSITORY_NAME}-env
+                name: env
           readinessProbe:
             httpGet:
               path: /
-              port: 80
+              port: 3000
       imagePullSecrets:
         - name: ${IMAGE_PULL_SECRET}
