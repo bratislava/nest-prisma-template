@@ -188,15 +188,10 @@ function get_docker(): Bash {
 }
 
 function docker_build(options: any) {
-  cp.spawnSync(
-    'docker',
-    [
-      'build',
-      '--platform=linux/amd64',
-      `--tag=${image_tag(options)}`,
-      '--target=prod',
-      '.',
-    ],
+  execSync(
+    `docker buildx build --platform=linux/amd64 --tag=${image_tag(
+      options,
+    )} --target=prod . `,
     {
       stdio: 'inherit',
     },

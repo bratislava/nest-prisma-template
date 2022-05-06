@@ -48,6 +48,6 @@ COPY --chown=node:node --from=build /root/app/dist ./dist
 COPY --chown=node:node --from=build /root/app/prisma ./prisma
 COPY --chown=node:node nest-cli.json ./nest-cli.json
 
-CMD [ "node", "dist/main.js" ]
+CMD [ "npm", "run", "start:prod" ]
 
 
