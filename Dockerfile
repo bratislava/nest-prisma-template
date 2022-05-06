@@ -5,11 +5,13 @@ RUN apt-get update && apt-get install git
 
 WORKDIR /root/app
 COPY package*.json ./
-COPY prisma ./prisma/
+# COPY prisma ./prisma/
 
 RUN npm ci
 
 COPY . ./
+
+RUN npx prisma generate --schema=./prisma/schema.deployment.prisma
 
 RUN npm run build
 

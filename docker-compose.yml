@@ -5,7 +5,7 @@ services:
       - postgres
     build:
       context: .
-      target: prod
+      target: dev
     init: true
     environment:
       - PORT=3001
