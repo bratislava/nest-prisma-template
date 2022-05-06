@@ -20,7 +20,7 @@ patches:
       - op: add
         path: /spec/template/spec/containers/0/env
         value:
-        - name: DB_POSTGRES_CS
+        - name: POSTGRES_DB
           value: postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@${BUILD_REPOSITORY_NAME}-database:5432/$(POSTGRES_DB)?schema=public
 
 
