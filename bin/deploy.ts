@@ -171,8 +171,7 @@ function get_pull_secret(options: any): Bash {
       'get',
       'secret',
       pull_secret_name(options),
-      ` --namespace=${options.namespace}`,
-      '--output=yaml',
+      `--namespace=${options.namespace}`,
     ],
     {
       encoding: 'utf8',
@@ -191,7 +190,13 @@ function get_docker(): Bash {
 function docker_build(options: any) {
   cp.spawnSync(
     'docker',
-    ['build', `--tag=${image_tag(options)}`, '--target=prod', '.'],
+    [
+      'build',
+      '--platform=linux/amd64',
+      `--tag=${image_tag(options)}`,
+      '--target=prod',
+      '.',
+    ],
     {
       stdio: 'inherit',
     },
@@ -244,6 +249,23 @@ function apply_to_kubernetes(manifest_path: string) {
   });
 }
 
+function deployment_status(options: any) {
+  log(chalk.reset(''));
+  cp.spawnSync(
+    'kubectl',
+    [
+      'rollout',
+      'status',
+      'deployment',
+      `${options.deployment}-app`,
+      `--namespace=${options.namespace}`,
+    ],
+    {
+      stdio: 'inherit',
+    },
+  );
+}
+
 try {
   clear();
   console.log(
@@ -264,8 +286,16 @@ try {
       'Docker image registry url',
       'harbor.bratislava.sk',
     )
-    .option('-v, --version <version>', 'Image version')
-    .option('--H, --help', 'Help user guide')
+    .option(
+      '-staging, --staging',
+      'To deploy on staging, you need to add this flag.',
+    )
+    .option(
+      '-production, --production',
+      'To deploy on production, you need to add this flag.',
+    )
+    .option('-debug, --debug', 'Debuging')
+    //.option('-v, --version <version>', 'Image version')
     .parse();
   const options = program.opts();
 
@@ -281,6 +311,19 @@ try {
     options.version = pack.version;
   }
 
+  if (typeof options.debug === 'undefined') {
+    options.debug = false;
+  }
+
+  if (
+    typeof options.staging !== 'undefined' &&
+    typeof options.production !== 'undefined'
+  ) {
+    throw new Error(
+      'Staging and production flag can`t be used at the same time!',
+    );
+  }
+
   line('(1) Checking git...');
   const pwd_bash = get_pwd();
   if (pwd_bash.err !== '') {
@@ -291,7 +334,7 @@ try {
   const branch_bash = get_current_branch();
   if (branch_bash.err !== '') {
     throw new Error(
-      'There was an issue optaining git branch name! Do you have git installed?',
+      'There was an issue obtaining git branch name! Do you have git installed?',
     );
   }
   options.branch = branch_bash.res;
@@ -331,10 +374,8 @@ try {
     options.commit,
     options.branch,
   );
-  options.merged = false;
-  if (remote_commit_bash.err === '') {
-    options.merged = true;
-  }
+
+  options.merged = remote_commit_bash.err === '';
   ok();
 
   line('(2) Checking current kubernetes cluster...');
@@ -369,6 +410,11 @@ try {
 
   switch (options.cluster) {
     case 'tkg-innov-prod':
+      if (typeof options.production === 'undefined') {
+        throw new Error(
+          "You cannot deploy to 'tkg-innov-prod' without production flag! Please add flag `--production` to the command.",
+        );
+      }
       if (options.untracked === true) {
         throw new Error(
           `You cannot deploy to 'tkg-innov-prod' when you have untracked changes. Please commit and PR merge your changes to master!`,
@@ -376,7 +422,7 @@ try {
       }
       if (options.branch !== 'master') {
         throw new Error(
-          `Please checkout git branch to master. Run 'git checkout master'`,
+          `You cannot deploy to 'tkg-innov-prod' when your current branch is not master. Please checkout git branch to master. Run 'git checkout master'`,
         );
       }
       if (options.merged === false) {
@@ -386,6 +432,11 @@ try {
       }
       break;
     case 'tkg-innov-staging':
+      if (typeof options.staging === 'undefined') {
+        throw new Error(
+          "You cannot deploy to 'tkg-innov-staging' without staging flag! Please add flag `--staging` to the command.",
+        );
+      }
       if (options.untracked === true) {
         throw new Error(
           `You cannot deploy to 'tkg-innov-staging' when you have untracked changes. Please commit and push changes to you branch origin/${options.branch}!`,
@@ -413,6 +464,10 @@ try {
   }
   ok();
 
+  /*
+    CHECKING KUBERNETES PULL SECRET FOR HARBOR
+    we need to check if we have a key to download image from harbor in kubernetes cluster.
+   */
   line(
     `(6) Checking kubernetes harbor pull secret '${pull_secret_name(
       options,
@@ -439,7 +494,7 @@ try {
   }
   ok();
 
-  message('(8) Building docker image...');
+  message('(8) Building docker image for platform linux/amd64...');
   message(`Docker image tag: ${image_tag(options)}`);
   docker_build(options);
   finished();
@@ -494,13 +549,19 @@ try {
   apply_to_kubernetes(manifest_path);
   finished();
 
-  line('(13) Cleaning manifest...');
-  try {
-    fs.unlinkSync(manifest_path);
-  } catch (err) {
-    throw new Error(`We had an error by cleaning manifest file`);
+  if (!options.debug) {
+    line('(16) Cleaning manifest...');
+    try {
+      fs.unlinkSync(manifest_path);
+    } catch (err) {
+      throw new Error(`We had an error by cleaning manifest file`);
+    }
+    ok();
   }
-  ok();
+
+  line('(17) Checking deployment status...');
+  deployment_status(options);
+  finished();
 } catch (e: any) {
   log('');
   log('\x1b[31m', e.message);
