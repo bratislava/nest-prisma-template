@@ -25,7 +25,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "vulnerabilities": "npm audit --audit-level=high --registry=https://registry.npmjs.org",
-    "chmod": "chmod u+x ./dist/bin/deploy.js",
+    "chmod": "chmod u+x ./dist/bin/bratiska-cli.js",
     "bratiska:build": "nest build && npm run chmod",
     "bratiska": "./dist/bin/bratiska-cli.js",
     "deploy": "bratiska",
