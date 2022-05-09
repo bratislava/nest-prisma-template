@@ -28,8 +28,8 @@
     "chmod": "chmod u+x ./dist/bin/bratiska-cli.js",
     "bratiska:build": "nest build && npm run chmod",
     "bratiska": "./dist/bin/bratiska-cli.js",
-    "deploy": "bratiska",
-    "deploy:build": "bratiska:build"
+    "deploy": "npm run bratiska",
+    "deploy:build": "npm run bratiska:build"
 
   },
   "dependencies": {
