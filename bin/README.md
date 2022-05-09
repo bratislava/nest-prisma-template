@@ -113,9 +113,10 @@ We need to configure a harbor connection for uploading images to the registry.
 1. Open our registry website: https://harbor.bratislava.sk
 2. Sign in with your Azure account
 3. Copy CLI secret from your profile. Follow the picture guide:
-
    - Go to your profile in the right top corner:
+   
      ![alt text](./public/readme/user.png)
+   
    - Click on `User Profile`
    - Copy `CLI secret`
      ![alt text](./public/readme/profile.png)
