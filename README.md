@@ -86,7 +86,7 @@ then run:
 npm run bratiska
 ```
 That`s all, and now your app can be live in the cluster.
-More info can be found in this user [guide](.bin/README.md).
+More info can be found in this user [guide](./bin/README.md).
 
 # Development
 
