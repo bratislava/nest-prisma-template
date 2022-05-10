@@ -44,7 +44,7 @@ WORKDIR /home/node/app
 
 COPY --chown=node:node --from=build /root/app/package*.json ./
 COPY --chown=node:node --from=build /root/app/node_modules ./node_modules
-RUN npm prune --no-production
+RUN npm prune --production
 
 COPY --chown=node:node --from=build /root/app/dist ./dist
 COPY --chown=node:node --from=build /root/app/prisma ./prisma
