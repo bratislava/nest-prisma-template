@@ -32,7 +32,7 @@ spec:
                 name: env
           readinessProbe:
             httpGet:
-              path: /
+              path: /api
               port: 3000
       imagePullSecrets:
         - name: ${IMAGE_PULL_SECRET}
