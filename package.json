@@ -5,12 +5,9 @@
   "author": "Bratislava city inovation",
   "private": false,
   "license": "LICENSED",
-  "bin": {
-    "deploy": "./dist/bin/deploy.js"
-  },
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "nest build && prisma generate",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -30,7 +27,6 @@
     "bratiska": "./dist/bin/bratiska-cli.js",
     "deploy": "./dist/bin/bratiska-cli.js",
     "deploy:build": "npm run bratiska:build"
-
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
@@ -57,6 +53,7 @@
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "bratiska-cli": "github:bratislava/bratiska-cli#master",
     "chalk": "^4.1.2",
     "clear": "^0.1.0",
     "commander": "^9.2.0",
