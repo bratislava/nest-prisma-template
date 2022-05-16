@@ -14,7 +14,7 @@ spec:
   tls:
     - hosts:
         - ${HOSTNAME}
-      secretName: tls
+      secretName: ${BUILD_REPOSITORY_NAME}-tls
   rules:
     - host: ${HOSTNAME}
       http:
