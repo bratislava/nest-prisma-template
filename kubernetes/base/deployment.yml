@@ -15,7 +15,7 @@ spec:
         service: app
     spec:
       containers:
-        - image: ${IMAGE}:${TAG}
+        - image: ${IMAGE_TAG}
           name: app
           imagePullPolicy: Always
           resources:
@@ -33,6 +33,6 @@ spec:
           readinessProbe:
             httpGet:
               path: /api
-              port: 3000
+              port: ${INTERNAL_APP_PORT}
       imagePullSecrets:
         - name: ${IMAGE_PULL_SECRET}

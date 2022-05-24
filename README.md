@@ -35,9 +35,6 @@ If you have issues connecting to your Postgres, maybe you need to set timeout `c
 DATABASE_URL="postgresql://user:password@localhost:5432/?connect_timeout=30&schema=public"
 ```
 
-
-
-
 ## Running the app
 
 ```bash
