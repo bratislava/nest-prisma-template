@@ -55,6 +55,48 @@ npm run deploy -- --production
 
 ### Run with more options
 
+#### Build image only
+If you want to build image only run:
+```bash
+npm run deploy -- --build_image
+```
+
+#### Build image only without push to registry
+If you want to build image without pushing to registry run:
+```bash
+npm run deploy -- --build_image_no_registry
+```
+
+#### Build kustomize only
+If you want to build kustomize file only run
+```bash
+npm run deploy -- --build_kustomize 
+```
+
+#### Build kustomize only with specified docker image
+If you want to build kustomize file only run
+```bash
+npm run deploy -- --build_kustomize --image harbor.bratislava.sk/standalone/nest-prisma-template:bratiska-cli-3f3ce4fd14c76138a081596b2987a81f18a3c747-master-untracked
+```
+
+#### Build kustomize only with specified docker image
+If you want to build kustomize file only run
+```bash
+npm run deploy --  --image harbor.bratislava.sk/standalone/nest-prisma-template:bratiska-cli-3f3ce4fd14c76138a081596b2987a81f18a3c747-master-untracked
+```
+
+#### Specify kustomize file or folder
+If you want you can specify kustomize file or kustomize folder with this command:
+```bash
+npm run deploy -- --kustomize ./path/path 
+```
+
+#### Dry run, without deploying to kubernetes
+If you don`t want to deploy to kubernetes, then you can run it with dry run flag:
+```bash
+npm run deploy -- --dry_run 
+```
+
 #### Namespace
 The default namespace for utility is `standalone`, but you can change it to other like:
 ```bash
@@ -100,6 +142,13 @@ If you need to debug the deploy process, you can add the `--debug` option. This 
 
 ```bash
 npm run deploy -- --debug
+```
+
+### Examples
+Dry run with custom image and specified folder to kustomize.
+
+```bash
+npm run deploy -- --dry_run --image harbor.bratislava.sk/standalone/nest-prisma-template:bratiska-cli-3f3ce4fd14c76138a081596b2987a81f18a3c747-master-untracked --kustomize ./kubernetes/base
 ```
 
 ##### TODO
