@@ -1,6 +1,4 @@
 import chalk from 'chalk';
-import cp from 'child_process';
-import { program } from 'commander';
 import * as pack from '../package.json';
 import crypto from 'crypto';
 import clear from 'clear';
@@ -84,7 +82,6 @@ export function image_tag(options) {
 }
 
 export function tag(options) {
-  const tag = '';
   if (options.image) {
     const tmp_split = options.image.split(':');
     return tmp_split[1];

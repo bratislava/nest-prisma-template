@@ -1,7 +1,5 @@
 import * as helpers from '../helpers';
 import * as commands from '../commands';
-import fs from 'fs';
-import { manifest_path } from '../helpers';
 
 export function deploy_kubernetes(options: any) {
   helpers.line('(17) Deploying to kubernetes...');

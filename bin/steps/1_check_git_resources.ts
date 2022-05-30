@@ -1,15 +1,5 @@
 import * as helpers from '../helpers';
 import * as commands from '../commands';
-import {
-  message,
-  print_debug,
-  print_if_debug,
-  print_important_info_line,
-  print_info,
-  print_info_line,
-  print_line_if_debug,
-  print_warning,
-} from '../helpers';
 
 export function check_git_resources(options: any) {
   helpers.line('(1) Checking git...');

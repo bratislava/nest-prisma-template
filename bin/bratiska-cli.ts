@@ -4,26 +4,9 @@ import chalk from 'chalk';
 import clear from 'clear';
 import figlet from 'figlet';
 import { program } from 'commander';
-import * as pack from '../package.json';
-import cp from 'child_process';
-import { execSync } from 'child_process';
-import fs from 'fs';
-import * as crypto from 'crypto';
 import { Steps } from './steps';
 const steps = new Steps();
 import * as helpers from './helpers';
-import * as commands from './commands';
-
-function should_we_skip_kubernetes_deploy(options: any) {
-  return (
-    options.build_kustomize === true ||
-    (options.build_image === true && options.build_image_no_registry === true)
-  );
-}
-
-function should_we_skip_image_create(options: any) {
-  return options.image === false;
-}
 
 try {
   clear();

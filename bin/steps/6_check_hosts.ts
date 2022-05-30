@@ -1,5 +1,4 @@
 import * as helpers from '../helpers';
-import { print_important_info_line } from '../helpers';
 
 export function check_hosts(options: any) {
   helpers.line('(5) Determining host...');

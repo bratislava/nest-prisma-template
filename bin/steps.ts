@@ -1,6 +1,3 @@
-import * as helpers from './helpers';
-import * as commands from './commands';
-import { git_current_commit, git_current_status } from './commands';
 import { show_options } from './steps/0_show_options';
 import { check_git_resources } from './steps/1_check_git_resources';
 import { check_kubernetes_cluster } from './steps/2_check_kubernetes_cluster';
@@ -48,8 +45,8 @@ export class Steps {
   check_kubernetes_harbor_key_7(options: any) {
     check_kubernetes_harbor_key(options);
   }
-  check_docker_8(options: any) {
-    check_docker(options);
+  check_docker_8() {
+    check_docker();
   }
   build_docker_image_9(options: any) {
     build_docker_image(options);

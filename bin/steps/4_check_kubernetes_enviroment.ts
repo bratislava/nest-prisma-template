@@ -1,6 +1,4 @@
 import * as helpers from '../helpers';
-import * as commands from '../commands';
-import { print_important_info_line } from '../helpers';
 
 export function check_kubernetes_enviroment(options: any) {
   helpers.line('(4) Checking chosen kubernetes cluster with environment...');

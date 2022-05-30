@@ -1,6 +1,5 @@
 import * as helpers from '../helpers';
 import * as commands from '../commands';
-import { print_info } from '../helpers';
 
 export function build_docker_image(options: any) {
   helpers.line('(8) Building docker image for platform linux/amd64...');

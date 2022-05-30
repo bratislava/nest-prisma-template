@@ -1,7 +1,5 @@
 import * as helpers from '../helpers';
 import * as commands from '../commands';
-import fs from 'fs';
-import { manifest_path } from '../helpers';
 
 export function check_deployment(options: any) {
   helpers.line('(19) Checking deployment status...');

@@ -1,5 +1,4 @@
 import * as helpers from '../helpers';
-import * as commands from '../commands';
 import fs from 'fs';
 
 export function check_kustomize(options: any) {

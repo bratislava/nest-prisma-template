@@ -1,7 +1,5 @@
 import * as helpers from '../helpers';
-import * as commands from '../commands';
 import fs from 'fs';
-import { manifest_path } from '../helpers';
 
 export function clean_kustomize(options: any) {
   helpers.line('(18) Cleaning kustomize manifest...');
