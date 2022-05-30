@@ -15,15 +15,20 @@ To be able to work with this utility, you need to have a few things configured:
 #### Installations:
 1. Installed `git` (https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 2. Installed `kubectl` (https://kubernetes.io/docs/tasks/tools/)
-3. Installed `docker` (https://docs.docker.com/engine/install)
-4. Kustomization files in `/kubernetes` folder
+3. Installed `kustomize` (https://kubectl.docs.kubernetes.io/installation/kustomize/)
+4. Installed `docker` (https://docs.docker.com/engine/install)
+5. Kustomization files in `/kubernetes` folder
 
 
 #### Running apps:
 These apps should be running when you start `bratiska-cli`:
 1. Run `docker`
-2. You need to be signed in to our docker repository `harbor.bratislava.sk`. See the manual below.
-3. You need to have running `kubect` and be signed into the Kubernetes cluster. If you have issues signing to Kubernetes, contact your administrator.
+2. You need to be signed in to our docker repository `harbor.Bratislava.sk`. See the manual below.
+```bash
+docker login https://harbor.bratislava.sk
+```
+
+4. You need to have running `kubect` and be signed into the Kubernetes cluster. If you have issues signing to Kubernetes, contact your administrator.
 
 
 ## Installation
@@ -33,10 +38,11 @@ Installing dependencies
 npm install
 ```
 
-Building cli in repo
+Building cli in the repo
 ```bash
 npm run deploy:build
 ```
+
 
 ## Usage
 There is straightforward usage because the utility tries to obtain all values from the repo automatically, and if something is missing, it will point out.
@@ -56,19 +62,19 @@ npm run deploy -- --production
 ### Run with more options
 
 #### Build image only
-If you want to build image only run:
+If you want to build an image only, run:
 ```bash
 npm run deploy -- --build_image
 ```
 
-#### Build image only without push to registry
-If you want to build image without pushing to registry run:
+#### Build image only without push to the registry
+If you want to build an image without pushing to registry run:
 ```bash
 npm run deploy -- --build_image_no_registry
 ```
 
 #### Build kustomize only
-If you want to build kustomize file only run
+If you want to build a kustomize file, only run
 ```bash
 npm run deploy -- --build_kustomize 
 ```
@@ -79,20 +85,20 @@ If you want to build kustomize file only run
 npm run deploy -- --build_kustomize --image harbor.bratislava.sk/standalone/nest-prisma-template:bratiska-cli-3f3ce4fd14c76138a081596b2987a81f18a3c747-master-untracked
 ```
 
-#### Build kustomize only with specified docker image
-If you want to build kustomize file only run
+#### Deploy with special imagee
+If you have specified image you can deploy it
 ```bash
 npm run deploy --  --image harbor.bratislava.sk/standalone/nest-prisma-template:bratiska-cli-3f3ce4fd14c76138a081596b2987a81f18a3c747-master-untracked
 ```
 
 #### Specify kustomize file or folder
-If you want you can specify kustomize file or kustomize folder with this command:
+If you want, you can specify the kustomize file or kustomize folder with this command:
 ```bash
 npm run deploy -- --kustomize ./path/path 
 ```
 
-#### Dry run, without deploying to kubernetes
-If you don`t want to deploy to kubernetes, then you can run it with dry run flag:
+#### Dry run, without deploying to Kubernetes
+If you don`t want to deploy to Kubernetes, then you can run it with a dry run flag:
 ```bash
 npm run deploy -- --dry_run 
 ```
@@ -106,7 +112,7 @@ npm run deploy -- --namespace=bratislava-monorepo
 #### Deployment
 Default deployment for the app names from `project.json`, but you can change it like:
 ```bash
-npm run deploy -- --deployment=nest-prisma-template-super-duper
+npm run deploy -- --deployment=nest-Prisma-template-super-duper
 ```
 
 #### Host
@@ -151,10 +157,6 @@ Dry run with custom image and specified folder to kustomize.
 npm run deploy -- --dry_run --image harbor.bratislava.sk/standalone/nest-prisma-template:bratiska-cli-3f3ce4fd14c76138a081596b2987a81f18a3c747-master-untracked --kustomize ./kubernetes/base
 ```
 
-##### TODO
-- add a flag for choosing the kusomisation folder.
-- restrict deployment to prod to specific users
-
 ## More manuals
 
 ### Signing to harbor
@@ -164,16 +166,16 @@ We need to configure a harbor connection for uploading images to the registry.
 1. Open our registry website: https://harbor.bratislava.sk
 2. Sign in with your Azure account
 3. Copy CLI secret from your profile. Follow the picture guide:
-   - Go to your profile in the right top corner:
-   
-     ![alt text](./public/readme/user.png)
-   
-   - Click on `User Profile`
-   - Copy `CLI secret`
-     ![alt text](./public/readme/profile.png)
+    - Go to your profile in the right top corner:
+
+      ![alt text](./public/readme/user.png)
+
+    - Click on `User Profile`
+    - Copy `CLI secret`
+      ![alt text](./public/readme/profile.png)
 4. Sign in docker with the command:
 ```bash
-$ docker login https://harbor.bratislava.sk
+docker login https://harbor.bratislava.sk
 ```
 using your username `your.name@bratislava.sk` and `CLI secret` value
 5. When you see `Login Succeeded,` then you are done 👏
@@ -183,7 +185,5 @@ using your username `your.name@bratislava.sk` and `CLI secret` value
 - If you find some bug, please get in touch with us on GitHub or mail inovacie@bratislava.sk
 - Website - [https://inovacie.bratislava.sk/](https://inovacie.bratislava.sk/)
 
-
--- nahodit check na porty
--- nahodit check na filepath s medzerou
--- secret tls
+TODO
+-- secrets creation support
