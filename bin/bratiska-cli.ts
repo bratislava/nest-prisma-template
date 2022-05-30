@@ -64,7 +64,7 @@ try {
   steps.check_kubernetes_cluster_conditions_5(options);
   steps.check_hosts_6(options);
   steps.check_kubernetes_harbor_key_7(options);
-  steps.check_docker_8(options);
+  steps.check_docker_8();
   steps.build_docker_image_9(options);
   steps.check_docker_image_10(options);
   steps.push_docker_image_11(options);
