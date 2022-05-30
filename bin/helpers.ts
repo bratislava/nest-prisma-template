@@ -98,7 +98,7 @@ export function tag(options) {
   if (options.branch === 'origin/master') {
     branch = '';
   }
-
+  branch = branch.replace(/\//g, '');
   return `bratiska-cli-${options.commit}${branch}${untracked}`;
 }
 
