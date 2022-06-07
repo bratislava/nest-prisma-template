@@ -6,7 +6,7 @@ Starting template for nest-prisma development under the city of Bratislava.
 
 If you want to run an application without installing it locally quickly, you can run it through `docker-compose`:
 ```bash
-$ docker-compose up --build
+docker-compose up --build
 ```
 
 # Local installation
@@ -14,13 +14,13 @@ $ docker-compose up --build
 - Run npm installation for dependencies
 
 ```bash
-$ npm install
+npm install
 ```
 
 - For Prisma, it comes in handy to have Prisma cli. Check if it is working on your pc:
 
 ```bash
-$ npx prisma
+npx prisma
 ```
 
 - Check the `.env` file for your correct local database connection configuration. It looks like this:
@@ -39,13 +39,13 @@ DATABASE_URL="postgresql://user:password@localhost:5432/?connect_timeout=30&sche
 
 ```bash
 # development
-$ npm run start
+npm run start
 
 # watch mode
-$ npm run start:dev
+npm run start:dev
 
 # production mode
-$ npm run start:prod
+npm run start:prod
 ```
 
 ## Test
@@ -54,13 +54,13 @@ To run tests in the repo, please use these commands:
 
 ```bash
 # unit tests
-$ npm run test
+npm run test
 
 # e2e tests
-$ npm run test:e2e
+npm run test:e2e
 
 # test coverage
-$ npm run test:cov
+npm run test:cov
 ```
 
 # Deployment
@@ -92,18 +92,18 @@ More info can be found in this user [guide](./bin/README.md).
   (but it deletes old Prisma schema if it is available there)
 
 ```bash
-$ prisma init
+prisma init
 ```
 
 If you have some change in the schema.prisma, run:
 
 ```bash
-$ npx prisma db push
+npx prisma db push
 ```
 This will update the structure. But if you have some existing data in db, you need to create migrations to propagate changes properly.
 
 ```bash
-$ npx prisma migrate dev --name init
+npx prisma migrate dev --name init
 ```
 This Prisma migrates dev command generates SQL files and directly runs them against the database. In this case, the following migration files were created in the existing Prisma directory:
 
@@ -116,13 +116,13 @@ We are using Prisma schema with the name `schema.deployment.prisma`, which has s
 To build the image for the development run:
 
 ```bash
-$ docker build --target dev .
+docker build --target dev .
 ```
 
 and for a production run:
 
 ```bash
-$ docker build --target prod .
+docker build --target prod .
 ```
 
 You can manually create a local image and push it to the repository if you are interested.
@@ -130,13 +130,13 @@ You can manually create a local image and push it to the repository if you are i
 You can decide which image you would like to build (dev or production) based on your preference.
 
 ```bash
-$ docker build -t harbor.bratislava.sk/standalone/nest-prisma-template:manual --target prod . 
+docker build -t harbor.bratislava.sk/standalone/nest-prisma-template:manual --target prod . 
 ```
 
 Push image to harbor
 
 ```bash
-$ docker push harbor.bratislava.sk/standalone/nest-prisma-template:manual
+docker push harbor.bratislava.sk/standalone/nest-prisma-template:manual
 ```
 
 ## Kustomize
@@ -144,7 +144,7 @@ $ docker push harbor.bratislava.sk/standalone/nest-prisma-template:manual
 If you don`t have Kustomize, please install it:
 
 ```bash
-$ brew install kustomize
+brew install kustomize
 ```
 
 Generating kustomize file from source files:
@@ -156,19 +156,19 @@ Generating kustomize file from source files:
 Let's have a look if you are in the proper cluster:
 
 ```bash
-$ kubectl config current-context
+kubectl config current-context
 ```
 
 We are using for secrets `Sealed Secrets` https://github.com/bitnami-labs/sealed-secrets.
 To use a secret in your project, you have to install `kubeseal` if you haven`t installed it yet.
 
 ```bash
-$ brew install kubeseal
+brew install kubeseal
 ```
 The next thing is going to the folder `secrets` where all our secrets are stored:
 
 ```bash
-$ cd kubernetes/base/secrets
+cd kubernetes/base/secrets
 ```
 
 After that, we need to create a temp file for our new secrets. Let's assume we want database connection secretes. You need to make this file `database.yml`
@@ -193,23 +193,23 @@ For example, if you need to set up the database name to `banana`, you need to ba
 
 The last thing is encrypting our secrets by kubeseal to be used on Kubernetes. You need to run this command that creates the file `database.secret.yml` where all our values are encrypted and safe to add to the repository.
 ```bash
-$ kubeseal --controller-name=sealed-secrets --scope=namespace-wide --namespace=standalone --format=yaml < database.yml > database.secret.yml 
+kubeseal --controller-name=sealed-secrets --scope=namespace-wide --namespace=standalone --format=yaml < database.yml > database.secret.yml 
 ```
 
 If you want to propagate a sealed secret to Kubernetes without a pipeline, you can run this command:
 ```bash
-$ kubectl create -f database.secret.yml
+kubectl create -f database.secret.yml
 ```
 
 If you already have a sealed secret in Kubernetes, you can update it with the command:
 ```bash
-$ kubectl apply -f database.secret.yml
+kubectl apply -f database.secret.yml
 ```
 Usually, you get this kind of error: `Error from server (AlreadyExists): error when creating "database.secret.yml": sealedsecrets.bitnami.com "nest-Prisma-template-database-secret" already exists`
 
 If you want to check if your secret is there, you can run this command:
 ```bash
-$ kubectl get secret --namespace=standalone nest-prisma-template-database-secret
+kubectl get secret --namespace=standalone nest-prisma-template-database-secret
 ```
 
 
