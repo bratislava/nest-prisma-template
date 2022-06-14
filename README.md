@@ -72,18 +72,17 @@ TODO
 ## Manual
 You can use our `bratiska-cli`, which takes care of deploying the app.
 
-First, build the utility:
-```bash
-npm run bratiska:build
-```
+1. First, install the utility:
+    ```bash
+    yarn global add bratislava/bratiska-cli
+    ```
 
+2. then go to folder of `/strapi` or `/next` and run just this command:
+    ```bash
+    bartiska-cli deploy
+    ```
 
-then run:
-```bash
-npm run bratiska
-```
-That`s all, and now your app can be live in the cluster.
-More info can be found in this user [guide](./bin/README.md).
+That`s all, everything should run automatically and if not you will be notified. You can also check [user guide of bratiska-cli](https://github.com/bratislava/bratiska-cli/blob/master/README.md).
 
 # Development
 
