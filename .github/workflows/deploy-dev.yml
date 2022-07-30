@@ -5,8 +5,8 @@ on:
        - master
 env:
   DOCKER_REGISTRY: harbor.bratislava.sk
-  DOCKER_USERNAME: robot$dev-bratiska-cli
-  DOCKER_PASSWORD: ${{ secrets.HARBOR_DEV_BRATISKA_CLI }}
+  DOCKER_USERNAME: robot$github_actions
+  DOCKER_PASSWORD: ${{ secrets.HARBOR_GITHUB_ACTIONS }}
   KUBERNETES_NAMESPACE: standalone
 jobs:
   deploy:
