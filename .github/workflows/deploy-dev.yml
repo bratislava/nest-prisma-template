@@ -27,6 +27,8 @@ jobs:
       run: yarn global add bratislava/bratiska-cli
     - name: Running git fetch for Bratiska-cli 
       run: git fetch
+    - name: Kubectl tool installer
+      uses: Azure/setup-kubectl@v2.1
     - name: Login to Kubernetes
       uses: Azure/k8s-set-context@v2
       with:
@@ -35,8 +37,6 @@ jobs:
         # Service account secret (run kubectl get serviceaccounts <service-account-name> -o yaml and copy the service-account-secret-name)
         k8s-secret: ${{ secrets.DEV_STANDALONE }}
         resource-group: ${{ env.KUBERNETES_NAMESPACE }}
-    - name: Kubectl tool installer
-      uses: Azure/setup-kubectl@v2.1
     - name: Login to Harbor
       uses: docker/login-action@v1
       with:
