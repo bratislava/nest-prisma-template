@@ -26,7 +26,7 @@ jobs:
     - name: Installing Bratiska-cli       
       run: yarn global add bratislava/bratiska-cli
     - name: Running git fetch for Bratiska-cli 
-    - run: git fetch
+      run: git fetch
     - name: Login to Kubernetes
       uses: Azure/k8s-set-context@v2
       with:
