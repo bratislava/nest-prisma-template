@@ -12,9 +12,6 @@ jobs:
   deploy:
     name: Build and deploy
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./next
     steps:
     - uses: actions/checkout@v3
     - name: Install Prerequisites -  Node.js
