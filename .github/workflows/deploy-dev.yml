@@ -13,7 +13,8 @@ jobs:
     name: Build and deploy
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - name: Checking out
+      uses: actions/checkout@v3
     - name: Install Prerequisites -  Node.js
       uses: actions/setup-node@v3
       with:
@@ -21,9 +22,10 @@ jobs:
     - name: Install Prerequisites - envsubst
       run: |
            sudo apt-get update
-           sudo apt-get install gettext-base    
-    - run: yarn --frozen-lockfile
-    - run: yarn global add bratislava/bratiska-cli
+           sudo apt-get install gettext-base
+    - name: Installing Bratiska-cli       
+      run: yarn global add bratislava/bratiska-cli
+    - name: Running git fetch for Bratiska-cli 
     - run: git fetch
     - name: Login to Kubernetes
       uses: Azure/k8s-set-context@v2
@@ -39,4 +41,5 @@ jobs:
         registry: ${{ env.DOCKER_REGISTRY }}
         username: ${{ env.DOCKER_USERNAME }}
         password: ${{ env.DOCKER_PASSWORD }}
-    - run: bratiska-cli deploy --dry_run
+    - name: Running build and deplou on Bratiska-cli 
+      run: bratiska-cli deploy --dry_run
