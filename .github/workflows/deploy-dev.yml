@@ -1,6 +1,6 @@
 name: Deploy code to kubernetes
 on:
-   pull_request:
+   push:
      branches:
        - master
 env:
