@@ -36,7 +36,6 @@ jobs:
         k8s-url: https://tkg.dev.bratislava.sk
         # Service account secret (run kubectl get serviceaccounts <service-account-name> -o yaml and copy the service-account-secret-name)
         k8s-secret: ${{ secrets.DEV_STANDALONEd }}
-        resource-group: ${{ env.KUBERNETES_NAMESPACE }}
     - run: kubectl config current-context
     - name: Login to Harbor
       uses: docker/login-action@v1
