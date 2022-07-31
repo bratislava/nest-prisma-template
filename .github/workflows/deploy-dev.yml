@@ -19,10 +19,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '16'
-    - name: Install Prerequisites - envsubst
-      run: |
-           sudo apt-get update
-           sudo apt-get install gettext-base
     - name: Installing Bratiska-cli       
       run: yarn global add bratislava/bratiska-cli
     - name: Running git fetch for Bratiska-cli 
@@ -33,7 +29,7 @@ jobs:
       uses: Azure/k8s-set-context@v2
       with:
         method: service-account
-        k8s-url: https://tkg.dev.bratislava.sk
+        k8s-url: https://tkgk.dev.bratislava.sk
         k8s-secret: ${{ secrets.DEV_STANDALONE }}
     - run: kubectl config current-context
     - name: Login to Harbor
