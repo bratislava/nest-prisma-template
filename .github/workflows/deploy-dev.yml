@@ -44,14 +44,11 @@ jobs:
     - name: Kubernetes set server with certificate account token
       run: kubectl config set-cluster ${{ env.KUBERNETES_CLUSTER }}  --insecure-skip-tls-verify --server=${{ env.KUBERNETES_SERVER_URL }}
       
-    - name: Kubernetes set context adn cluster
+    - name: Kubernetes set context cluster
       run: kubectl config set-context ${{ env.KUBERNETES_CLUSTER }} --cluster=${{ env.KUBERNETES_CLUSTER }} --user=default
         
     - name: Kubernetes use context
       run: kubectl config use-context ${{ env.KUBERNETES_CLUSTER }}
-        
-    - name: Check connection
-      run: kubectl get pods -n=standalone
             
     - name: Login to Harbor
       uses: docker/login-action@v2
