@@ -16,6 +16,7 @@ jobs:
   deploy:
     name: Build and deploy
     runs-on: ubuntu-latest
+    
     steps:
     - name: Checking out
       uses: actions/checkout@v3
