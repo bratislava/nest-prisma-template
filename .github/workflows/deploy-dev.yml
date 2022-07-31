@@ -8,8 +8,6 @@ env:
   DOCKER_USERNAME: robot$github_actions
   DOCKER_PASSWORD: ${{ secrets.HARBOR_GITHUB_ACTIONS }}
   KUBERNETES_NAMESPACE: standalone
-  # kubectl get secret <service account> -n=standalone -o jsonpath='{.data.ca\.crt}' > cert.ca
-  KUBERNETES_SERVICE_ACCOUNT_CERT: ${{ secrets.DEV_STANDALONE_CERT }}
   # kubectl get secret <service account secret> -n=standalone -o jsonpath='{.data.token}' | base64 --decode  > token.tmp
   KUBERNETES_SERVICE_ACCOUNT_TOKEN: ${{ secrets.DEV_STANDALONE_TOKEN }}
   KUBERNETES_SERVER_URL: https://tkg.dev.bratislava.sk
@@ -53,9 +51,7 @@ jobs:
         
     - name: Check connection
       run: kubectl get pods -n=standalone
-        
-    - run: kubectl config current-context
-    
+            
     - name: Login to Harbor
       uses: docker/login-action@v1
       with:
@@ -65,3 +61,4 @@ jobs:
         
     - name: Running build and deploy on Bratiska-cli 
       run: bratiska-cli deploy --debug
+      continue-on-error: false
