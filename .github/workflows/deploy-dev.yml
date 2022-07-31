@@ -8,6 +8,12 @@ env:
   DOCKER_USERNAME: robot$github_actions
   DOCKER_PASSWORD: ${{ secrets.HARBOR_GITHUB_ACTIONS }}
   KUBERNETES_NAMESPACE: standalone
+  # kubectl get secret <service account> -n=standalone -o jsonpath='{.data.ca\.crt}' > cert.ca
+  KUBERNETES_SERVICE_ACCOUNT_CERT: ${{ secrets.DEV_STANDALONE_CERT }}
+  # kubectl get secret <service account secret> -n=standalone -o jsonpath='{.data.token}' | base64 --decode  > token.tmp
+  KUBERNETES_SERVICE_ACCOUNT_TOKEN: ${{ secrets.DEV_STANDALONE_TOKEN }}
+  KUBERNETES_SERVER_URL: https://tkg.dev.bratislava.sk
+  KUBERNETES_CLUSTER: tkg-innov-dev
 jobs:
   deploy:
     name: Build and deploy
@@ -31,8 +37,19 @@ jobs:
         method: service-account
         k8s-url: https://tkgk.dev.bratislava.sk
         k8s-secret: ${{ secrets.DEV_STANDALONE }}
-    - run: kubectl config set-credentials default --token=secrets.DEV_STANDALONE
-    - run: kubectl config set-context --current --user=default
+        
+    - name: Kubernetes set service account token
+      run: kubectl config set-credentials default --token=env.KUBERNETES_SERVICE_ACCOUNT_TOKEN
+        
+    - name: Kubernetes set server with certificate account token
+      run: kubectl config set-cluster default --server=env.KUBERNETES_SERVER_URL --certificate-authority=env.KUBERNETES_SERVICE_ACCOUNT_CERT
+      
+    - name: Kubernetes set context adn cluster
+      run: kubectl config set-context env.KUBERNETES_CLUSTER --cluster=env.KUBERNETES_CLUSTER --user=default
+        
+    - name: Kubernetes use context
+      run: kubectl config use-context env.KUBERNETES_CLUSTER
+        
     - run: kubectl config current-context
     - name: Login to Harbor
       uses: docker/login-action@v1
