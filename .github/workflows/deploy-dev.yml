@@ -62,6 +62,6 @@ jobs:
     - name: Print Bratiska-cli version 
       run: bratiska-cli deploy --version
    
-    - name: Running build and deploy on Bratiska-cli 
+    - name: Running build and deploy with Bratiska-cli 
       run: bratiska-cli deploy --debug
       continue-on-error: false
