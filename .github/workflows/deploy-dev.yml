@@ -38,11 +38,14 @@ jobs:
         k8s-url: https://tkgk.dev.bratislava.sk
         k8s-secret: ${{ secrets.DEV_STANDALONE }}
         
+    - name: Set certificate for kuberntes
+      run: ${{ secrets.DEV_STANDALONE_CERT }} > ca.crt
+        
     - name: Kubernetes set service account token
       run: kubectl config set-credentials default --token=${{ env.KUBERNETES_SERVICE_ACCOUNT_TOKEN }}
         
     - name: Kubernetes set server with certificate account token
-      run: kubectl config set-cluster ${{ env.KUBERNETES_CLUSTER }} --server=${{ env.KUBERNETES_SERVER_URL }} --certificate-authority=${{ env.KUBERNETES_SERVICE_ACCOUNT_CERT }}
+      run: kubectl config set-cluster ${{ env.KUBERNETES_CLUSTER }} --server=${{ env.KUBERNETES_SERVER_URL }} --certificate-authority=ca.crt
       
     - name: Kubernetes set context adn cluster
       run: kubectl config set-context ${{ env.KUBERNETES_CLUSTER }} --cluster=${{ env.KUBERNETES_CLUSTER }} --user=default
