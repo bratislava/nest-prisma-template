@@ -39,7 +39,7 @@ jobs:
         k8s-secret: ${{ secrets.DEV_STANDALONE }}
         
     - name: Set certificate for kuberntes
-      run: ${{ secrets.DEV_STANDALONE_CERT }} > ca.crt
+      run: echo ${{ secrets.DEV_STANDALONE_CERT }} > ca.crt
         
     - name: Kubernetes set service account token
       run: kubectl config set-credentials default --token=${{ env.KUBERNETES_SERVICE_ACCOUNT_TOKEN }}
