@@ -39,16 +39,16 @@ jobs:
         k8s-secret: ${{ secrets.DEV_STANDALONE }}
         
     - name: Kubernetes set service account token
-      run: kubectl config set-credentials default --token=env.KUBERNETES_SERVICE_ACCOUNT_TOKEN
+      run: kubectl config set-credentials default --token=${{ env.KUBERNETES_SERVICE_ACCOUNT_TOKEN }}
         
     - name: Kubernetes set server with certificate account token
-      run: kubectl config set-cluster default --server=env.KUBERNETES_SERVER_URL --certificate-authority=env.KUBERNETES_SERVICE_ACCOUNT_CERT
+      run: kubectl config set-cluster default --server=${{ env.KUBERNETES_SERVER_URL }} --certificate-authority=${{ env.KUBERNETES_SERVICE_ACCOUNT_CERT }}
       
     - name: Kubernetes set context adn cluster
-      run: kubectl config set-context env.KUBERNETES_CLUSTER --cluster=env.KUBERNETES_CLUSTER --user=default
+      run: kubectl config set-context ${{ env.KUBERNETES_CLUSTER }} --cluster=${{ env.KUBERNETES_CLUSTER }} --user=default
         
     - name: Kubernetes use context
-      run: kubectl config use-context env.KUBERNETES_CLUSTER
+      run: kubectl config use-context ${{ env.KUBERNETES_CLUSTER }}
         
     - run: kubectl config current-context
     - name: Login to Harbor
@@ -58,4 +58,4 @@ jobs:
         username: ${{ env.DOCKER_USERNAME }}
         password: ${{ env.DOCKER_PASSWORD }}
     - name: Running build and deploy on Bratiska-cli 
-      run: bratiska-cli deploy --dry_run
+      run: bratiska-cli deploy
