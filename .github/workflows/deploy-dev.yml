@@ -64,4 +64,4 @@ jobs:
         username: ${{ env.DOCKER_USERNAME }}
         password: ${{ env.DOCKER_PASSWORD }}
     - name: Running build and deploy on Bratiska-cli 
-      run: bratiska-cli deploy
+      run: bratiska-cli deploy --debug
