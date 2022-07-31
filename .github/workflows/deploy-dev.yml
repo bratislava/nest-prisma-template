@@ -50,6 +50,9 @@ jobs:
     - name: Kubernetes use context
       run: kubectl config use-context ${{ env.KUBERNETES_CLUSTER }}
         
+    - name: Check connection
+      run: kubectl get pods -n=standalone
+        
     - run: kubectl config current-context
     - name: Login to Harbor
       uses: docker/login-action@v1
