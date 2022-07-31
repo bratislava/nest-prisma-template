@@ -34,9 +34,6 @@ jobs:
       
     - name: Kubectl tool installer
       uses: Azure/setup-kubectl@v2.1
-      
-    - name: Set certificate for kuberntes
-      run: echo ${{ env.KUBERNETES_SERVICE_ACCOUNT_CERT }} | base64 -d > ca.crt
         
     - name: Kubernetes set service account token
       run: kubectl config set-credentials default --token=${{ env.KUBERNETES_SERVICE_ACCOUNT_TOKEN }}
@@ -61,5 +58,5 @@ jobs:
       run: bratiska-cli deploy --version
    
     - name: Running build and deploy with Bratiska-cli 
-      run: bratiska-cli deploy --debug
+      run: bratiska-cli deploy
       continue-on-error: false
