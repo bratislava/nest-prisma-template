@@ -42,7 +42,7 @@ jobs:
       run: kubectl config set-credentials default --token=${{ env.KUBERNETES_SERVICE_ACCOUNT_TOKEN }}
         
     - name: Kubernetes set server with certificate account token
-      run: kubectl config set-cluster default --server=${{ env.KUBERNETES_SERVER_URL }} --certificate-authority=${{ env.KUBERNETES_SERVICE_ACCOUNT_CERT }}
+      run: kubectl config set-cluster ${{ env.KUBERNETES_CLUSTER }} --server=${{ env.KUBERNETES_SERVER_URL }} --certificate-authority=${{ env.KUBERNETES_SERVICE_ACCOUNT_CERT }}
       
     - name: Kubernetes set context adn cluster
       run: kubectl config set-context ${{ env.KUBERNETES_CLUSTER }} --cluster=${{ env.KUBERNETES_CLUSTER }} --user=default
