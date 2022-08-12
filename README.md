@@ -177,6 +177,8 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: database-secret
+annotation:
+  sealedsecrets.bitnami.com/managed: "true"
 data:
   POSTGRES_DB: YmFuYW5h
   POSTGRES_USER: YmFuYW5h
@@ -184,8 +186,8 @@ data:
 ```
 
 - `metadata.name` is the name of the group of secrets in our case, `database-secret`
-
-- `data` contains environment variables keys (`POSTGRES_DB`) and base64 encode values (`YmFuYW5h`).
+- `annotation/sealedsecrets.bitnami` add this to automatically create unsealed secret in kubernetes cluster
+- `data` contains environment variables keys (`POSTGRES_DB`) and base64 encode values (`YmFuYW5h`)
 
 For example, if you need to set up the database name to `banana`, you need to base64 encode this value. You can use an online base64 converter like https://www.base64encode.org and encode `banana` to `YmFuYW5h`.
 
