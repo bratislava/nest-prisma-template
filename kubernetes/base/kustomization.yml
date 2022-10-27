@@ -5,8 +5,6 @@ resources:
   # Comment-out these lines if no database is used
   - stateful-set.yml
   - service-database.yml
-  # Add any secrets here
-  - ./secrets/database.secret.yml
 configurations:
   - configuration.yml
 
