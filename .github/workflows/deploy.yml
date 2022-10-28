@@ -1,4 +1,4 @@
-name: Nest.js deploy pipeline
+name: Nest deploy pipeline
 on:
   push:
     tags:
@@ -11,13 +11,13 @@ on:
 jobs:
   conditions:
     name: Check for cluster conditions
-    uses: bratislava/github-actions/.github/workflows/cluster-deploy-conditions-simple.yml@beta
+    uses: bratislava/github-actions/.github/workflows/cluster-deploy-conditions-simple.yml@stable-simple
 
   deploy-dev:
     name: Deploy to dev
     if: needs.conditions.outputs.dev == 'true'
     needs: conditions
-    uses: bratislava/github-actions/.github/workflows/deploy-with-bratiska-cli.yml@stable
+    uses: bratislava/github-actions/.github/workflows/deploy-with-bratiska-cli.yml@beta
     with:
       directory: ./
       cluster: tkg-innov-dev
@@ -38,6 +38,7 @@ jobs:
       cluster: tkg-innov-staging
       url: https://tkg.staging.bratislava.sk
       flag: --staging
+      debug: --debug
     secrets:
       service-account: ${{ secrets.STAGING_STANDALONE_TOKEN }}
       registry-pass: ${{ secrets.HARBOR_REGISTRY_PASSWORD }}
