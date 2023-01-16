@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     name: build node application
+    permissions: write-all
     uses: bratislava/github-actions/.github/workflows/build-with-bratiska-cli.yml@stable
     with:
       directory: ./
