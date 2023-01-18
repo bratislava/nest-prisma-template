@@ -25,11 +25,11 @@ spec:
           imagePullPolicy: IfNotPresent
           resources:
             limits:
-              cpu: 500m
-              memory: 1Gi
+              cpu: ${NEST_CPU_LIMITS}
+              memory: ${NEST_MEMORY_LIMITS}
             requests:
-              cpu: 50m
-              memory: 64Mi
+              cpu: ${NEST_CPU_REQUESTS}
+              memory: ${NEST_MEMORY_REQUESTS}
           envFrom:
             - secretRef:
                 name: database-secret
