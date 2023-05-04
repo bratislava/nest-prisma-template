@@ -27,7 +27,7 @@ spec:
               cpu: ${DB_CPU_REQUESTS}
               memory: ${DB_MEMORY_REQUESTS}
           volumeMounts:
-            - name: ${BUILD_REPOSITORY_NAME}-postgresql
+            - name: postgresql
               mountPath: /var/lib/postgresql/data
               subPath: postgresql
           envFrom:
@@ -36,7 +36,7 @@ spec:
   # Volume Claim
   volumeClaimTemplates:
     - metadata:
-        name: ${BUILD_REPOSITORY_NAME}-postgresql
+        name: postgresql
         labels:
           service: database
       spec:
