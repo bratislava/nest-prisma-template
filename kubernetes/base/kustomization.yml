@@ -11,7 +11,7 @@ configurations:
 # Add composite env vars from secrets
 patches:
   - target:
-      name: app
+      name: ${BUILD_REPOSITORY_NAME}-app
       kind: Deployment
     patch: |-
       - op: add
