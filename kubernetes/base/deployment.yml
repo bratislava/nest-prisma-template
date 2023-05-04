@@ -30,6 +30,9 @@ spec:
             requests:
               cpu: ${NEST_CPU_REQUESTS}
               memory: ${NEST_MEMORY_REQUESTS}
+          env:
+            - name: DATABASE_URL
+              value: postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@${BUILD_REPOSITORY_NAME}-database:5432/$(POSTGRES_DB)?schema=public
           envFrom:
             - secretRef:
                 name: ${BUILD_REPOSITORY_NAME}-database-secret
