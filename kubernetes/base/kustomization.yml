@@ -22,7 +22,6 @@ patches:
 
 
 # Keep as is
-namePrefix: ${BUILD_REPOSITORY_NAME}-
 commonLabels:
   app: ${BUILD_REPOSITORY_NAME}
   source: ${BUILD_REPOSITORY_NAME}
@@ -31,7 +30,7 @@ generatorOptions:
   disableNameSuffixHash: true
 
 configMapGenerator:
-- name: env
+- name: ${BUILD_REPOSITORY_NAME}-env
   namespace: ${NAMESPACE}
   envs:
   - .env

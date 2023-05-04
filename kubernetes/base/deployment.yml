@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
+  name: ${BUILD_REPOSITORY_NAME}-app
   namespace: ${NAMESPACE}
   labels:
     service: app
@@ -32,9 +32,9 @@ spec:
               memory: ${NEST_MEMORY_REQUESTS}
           envFrom:
             - secretRef:
-                name: database-secret
+                name: ${BUILD_REPOSITORY_NAME}-database-secret
             - configMapRef:
-                name: env
+                name: ${BUILD_REPOSITORY_NAME}-env
           readinessProbe:
             httpGet:
               path: /api

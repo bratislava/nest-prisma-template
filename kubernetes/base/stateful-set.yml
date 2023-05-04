@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: database
+  name: ${BUILD_REPOSITORY_NAME}-database
   namespace: ${NAMESPACE}
   labels:
     service: database
 spec:
-  serviceName: database
+  serviceName: ${BUILD_REPOSITORY_NAME}-database
   selector:
     matchLabels:
       service: database
@@ -27,16 +27,16 @@ spec:
               cpu: ${DB_CPU_REQUESTS}
               memory: ${DB_MEMORY_REQUESTS}
           volumeMounts:
-            - name: postgresql
+            - name: ${BUILD_REPOSITORY_NAME}-postgresql
               mountPath: /var/lib/postgresql/data
               subPath: postgresql
           envFrom:
             - secretRef:
-                name: database-secret
+                name: ${BUILD_REPOSITORY_NAME}-database-secret
   # Volume Claim
   volumeClaimTemplates:
     - metadata:
-        name: postgresql
+        name: ${BUILD_REPOSITORY_NAME}-postgresql
         labels:
           service: database
       spec:
