@@ -6,7 +6,7 @@ metadata:
   labels:
     service: database
 spec:
-  serviceName: database
+  serviceName: ${BUILD_REPOSITORY_NAME}-database
   selector:
     matchLabels:
       service: database
