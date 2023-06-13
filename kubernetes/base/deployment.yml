@@ -5,6 +5,7 @@ metadata:
   namespace: ${NAMESPACE}
   labels:
     service: app
+    sla: aws-critical
   annotations:
     repositoryUrl: ${BUILD_REPOSITORY_URI}
     commit: ${COMMIT}
