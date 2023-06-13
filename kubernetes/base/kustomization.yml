@@ -11,8 +11,8 @@ configurations:
 # Keep as is
 commonLabels:
   app: ${BUILD_REPOSITORY_NAME}
-  source: ${BUILD_REPOSITORY_NAME}
   sla: aws-critical
+  source: ${BUILD_REPOSITORY_NAME}
 
 generatorOptions:
   disableNameSuffixHash: true
