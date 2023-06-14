@@ -5,7 +5,6 @@ metadata:
   namespace: ${NAMESPACE}
   labels:
     service: database
-    sla: aws-critical
 spec:
   ports:
     - protocol: TCP
