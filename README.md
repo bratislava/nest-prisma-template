@@ -231,6 +231,22 @@ POSTGRES_USER: bmVzdC1wcmlzbWEtdGVtcGxhdGU=
 POSTGRES_PASSWORD: TEJjZHNvMDhiJmFhc2QoY2syKmQhcA==
 ```
 
+#### Reset DB in postgres
+Sometime when you have project not yet in production, and DB schema is developing, you can reset DB to apply new changes instead of pilling migrations.
+
+Open terminal with postgress pod and log in:
+```bash
+psql -U nest-forms-backend
+```
+then run these commands:
+```bash
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+GRANT ALL ON SCHEMA public TO "nest-forms-backend";
+GRANT ALL ON SCHEMA public TO public;
+```
+
+
 
 ## Stay in touch
 
