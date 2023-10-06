@@ -11,7 +11,7 @@ on:
 jobs:
   conditions:
     name: Check for cluster conditions
-    uses: bratislava/github-actions/.github/workflows/cluster-deploy-conditions-simple.yml@beta
+    uses: bratislava/github-actions/.github/workflows/cluster-deploy-conditions-simple.yml@stable
 
   deploy-dev:
     name: Deploy to dev
