@@ -1,5 +1,7 @@
+FROM node:18.18.2-alpine AS base
+
 # build
-FROM node:20.8.0 AS build
+FROM base AS build-base
 
 RUN apt-get update && apt-get install git
 
@@ -18,7 +20,7 @@ RUN npx prisma migrate
 RUN npm run build
 
 # development
-FROM node:20.8.0 AS dev
+FROM base AS dev
 
 RUN apt-get update && apt-get install -y git \
     postgresql-client \
@@ -37,7 +39,7 @@ CMD [ "npm", "run", "start:debug" ]
 
 
 # production
-FROM node:20.8.0-alpine AS prod
+FROM base AS prod
 
 USER node
 
