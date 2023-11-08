@@ -1,7 +1,8 @@
-FROM node:20.9.0-alpine AS base
+FROM node:20.9.0 AS base
+FROM node:20.9.0-alpine AS base-alpine
 
 # build
-FROM base AS build-base
+FROM base AS build
 
 RUN apt-get update && apt-get install git
 
@@ -39,7 +40,7 @@ CMD [ "npm", "run", "start:debug" ]
 
 
 # production
-FROM base AS prod
+FROM base-alpine AS prod
 
 USER node
 
