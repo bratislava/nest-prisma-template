@@ -1,5 +1,8 @@
+FROM node:20.9.0 AS base
+FROM node:20.9.0-alpine AS base-alpine
+
 # build
-FROM node:16.10.0 AS build
+FROM base AS build
 
 RUN apt-get update && apt-get install git
 
@@ -11,14 +14,14 @@ RUN npm ci
 
 COPY . ./
 
-RUN npx prisma generate --schema=./prisma/schema.deployment.prisma
+RUN npx prisma generate --schema=./prisma/schema.prisma
 
 RUN npx prisma migrate
 
 RUN npm run build
 
 # development
-FROM node:16.10.0 AS dev
+FROM base AS dev
 
 RUN apt-get update && apt-get install -y git \
     postgresql-client \
@@ -37,7 +40,7 @@ CMD [ "npm", "run", "start:debug" ]
 
 
 # production
-FROM node:16.10.0-alpine AS prod
+FROM base-alpine AS prod
 
 USER node
 
