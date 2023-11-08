@@ -13,7 +13,7 @@ RUN npm ci
 
 COPY . ./
 
-RUN npx prisma generate --schema=./prisma/schema.deployment.prisma
+RUN npx prisma generate --schema=./prisma/schema.prisma
 
 RUN npx prisma migrate
 
