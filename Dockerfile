@@ -1,5 +1,5 @@
-FROM node:20.9.0 AS base
-FROM node:20.9.0-alpine AS base-alpine
+FROM node:20.9 AS base
+FROM node:20.9-alpine AS base-alpine
 
 # build
 FROM base AS build
