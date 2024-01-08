@@ -2,22 +2,29 @@ version: '3.8'
 services:
   nest:
     depends_on:
-      - postgres
+      - postgresql
+    container_name: 'nest-template'
     build:
       context: .
-      target: dev
+      target: prod
     init: true
+    env_file:
+      - .env
     environment:
-      - PORT=3001
-      - DEBUG_HOST=0.0.0.0:9229
-      - DATABASE_URL=postgresql://user:pass@postgres:54320/mydb?schema=public&connect_timeout=30
+      PORT: 3000
+      DEBUG_HOST: 0.0.0.0:9229
+      DATABASE_URL: postgresql://user:pass@postgres_db:54320/mydb?schema=public&connect_timeout=30
     command: npm run start:debug
     ports:
-      - "127.0.0.1:3001:3001"
+      - "127.0.0.1:3000:3000"
       - "127.0.0.1:9229:9229"
+    volumes:
+      - ./:/home/node/app
 
-  postgres:
-    image: postgres:latest
+  postgresql:
+    image: postgres:13
+    container_name: 'postgres_db'
+    restart: always
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
@@ -26,7 +33,10 @@ services:
     expose:
       - '54320'
     ports:
-      - '127.0.0.1:54320:54320'
+      - '54320:54320'
+    # volumes:
+    #   - postgres:/var/lib/postgresql/data
 
 volumes:
   postgres:
+    name: nest-db

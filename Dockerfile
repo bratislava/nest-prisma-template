@@ -1,60 +1,47 @@
-FROM node:20.9 AS base
-FROM node:20.9-alpine AS base-alpine
+FROM node:20.10-alpine AS base
+ENV NODE_ENV=production
 
-# build
-FROM base AS build
+FROM base AS app-base
+RUN apk update \
+ && apk add tini\
+ && rm -rf /var/cache/apk/* \
+ && mkdir -p /home/node/app \
+ && chown -R node:node /home/node/app
+USER node
+WORKDIR /home/node/app
+ENTRYPOINT [ "sbin/tini", "--" ]
 
-RUN apt-get update && apt-get install git
+FROM base AS build-base
+WORKDIR /build
+COPY package.json package-lock.json ./
+COPY prisma ./prisma/
+RUN npm ci --omi=dev --frozen-lockfile
 
-WORKDIR /root/app
-COPY package*.json ./
-# COPY prisma ./prisma/
-
-RUN npm ci
-
-COPY . ./
-
-RUN npx prisma generate --schema=./prisma/schema.prisma
-
-RUN npx prisma migrate
-
+FROM build-base AS build
+COPY --chown=node:node . ./
+RUN npx prisma generate
 RUN npm run build
 
-# development
-FROM base AS dev
+FROM build-base AS dev-build
+RUN npm install --development
 
-RUN apt-get update && apt-get install -y git \
-    postgresql-client \
-    curl \
-    vim
-
-WORKDIR /home/node/app
-COPY package*.json ./
-
-RUN npm install
-COPY . ./
-
-RUN npx prisma generate
-
+FROM app-base AS dev
+ENV NODE_ENV=development
+COPY --chown=node:node --from=dev-build /build/node_modules ./node_modules
 CMD [ "npm", "run", "start:debug" ]
 
-
 # production
-FROM base-alpine AS prod
-
-USER node
-
-RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
-WORKDIR /home/node/app
-
-COPY --chown=node:node --from=build /root/app/package*.json ./
-COPY --chown=node:node --from=build /root/app/node_modules ./node_modules
-RUN npm prune --production
-
-COPY --chown=node:node --from=build /root/app/dist ./dist
-COPY --chown=node:node --from=build /root/app/prisma ./prisma
+FROM app-base AS prod
+COPY --chown=node:node --from=build /build/package.json /build/package-lock.json ./
+COPY --chown=node:node --from=build /build/node_modules ./node_modules
+# RUN npm prune --production
+COPY --chown=node:node --from=build /build/dist ./dist
+COPY --chown=node:node --from=build /build/prisma ./prisma
 COPY --chown=node:node nest-cli.json ./nest-cli.json
-
-ENTRYPOINT npx prisma migrate deploy && npm run start:prod
-
-
+EXPOSE 3000
+ARG GIT_COMMIT="undefined"
+ENV GIT_COMMIT=$GIT_COMMIT
+LABEL org.opencontainers.image.revision="${GIT_COMMIT}" \
+      org.opencontainers.image.source="https://github.com/bratislava/nest-prisma-template" \
+      org.opencontainers.image.licenses="EUPL-1.2"
+CMD [ "npm", "run", "start:migrate:prod" ]
