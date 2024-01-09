@@ -29,9 +29,7 @@ export class UsersService {
   }
 
   async addUser(newUser: UserCreateQueryDto) {
-    await this.prisma.user.create({data: newUser}).catch((error) => {
-      return error
-    })
+    await this.prisma.user.create({data: newUser})
     return 'New user added successfully!'
   }
 

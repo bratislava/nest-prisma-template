@@ -9,7 +9,7 @@ RUN apk update \
  && chown -R node:node /home/node/app
 USER node
 WORKDIR /home/node/app
-ENTRYPOINT [ "sbin/tini", "--" ]
+ENTRYPOINT [ "/sbin/tini", "--" ]
 
 FROM base AS build-base
 WORKDIR /build

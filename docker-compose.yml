@@ -1,3 +1,4 @@
+# for prod with migrated db change target to prod and command to npm run start:migrate:prod
 version: '3.8'
 services:
   nest:
@@ -6,8 +7,7 @@ services:
     container_name: 'nest-template'
     build:
       context: .
-      target: prod
-    init: true
+      target: dev
     env_file:
       - .env
     environment:
@@ -34,8 +34,8 @@ services:
       - '54320'
     ports:
       - '54320:54320'
-    # volumes:
-    #   - postgres:/var/lib/postgresql/data
+    volumes:
+      - postgres:/var/lib/postgresql/data
 
 volumes:
   postgres:
