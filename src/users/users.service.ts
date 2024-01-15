@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { isString } from 'class-validator';
 import { PrismaService } from '../prisma/prisma.service';
-import { QueryParamsDto } from './dto/query-params.dto';
+import { QueryParamsDto, UserCreateQueryDto } from './dto/query-params.dto';
 
 @Injectable()
 export class UsersService {
@@ -26,6 +26,11 @@ export class UsersService {
       },
     });
     return users;
+  }
+
+  async addUser(newUser: UserCreateQueryDto) {
+    await this.prisma.user.create({data: newUser})
+    return 'New user added successfully!'
   }
 
   private prepareQuery(queryParamsDto?: QueryParamsDto) {

@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsIn } from 'class-validator';
+import { IsString, IsOptional, IsIn, IsNotEmpty, IsEmail } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 const SortBy = ['asc', 'desc'] as const;
@@ -30,4 +30,21 @@ export class QueryParamsDto {
   @IsOptional()
   @IsString()
   orderBy?: string;
+}
+
+export class UserCreateQueryDto {
+  @ApiProperty({
+    description: 'user name',
+    example: 'Chuck',
+  })
+  @IsNotEmpty()
+  name: string
+
+  @ApiProperty({
+    description: 'email',
+    example: 'chuck@norris.com'
+  })
+  @IsNotEmpty()
+  @IsEmail()
+  email: string
 }

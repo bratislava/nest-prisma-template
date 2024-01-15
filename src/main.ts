@@ -14,7 +14,7 @@ async function bootstrap() {
       'https://inovacie.bratislava.sk',
       'inovacie@bratislava.sk',
     )
-    .addServer('https://localhost:' + port + '/')
+    .addServer('http://localhost:' + port + '/')
     .addServer('https://nest-prisma-template.dev.bratislava.sk/')
     .build();
 

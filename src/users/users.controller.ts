@@ -10,7 +10,7 @@ import { UsersService } from './users.service';
 /*
   DTOs
  */
-import { QueryParamsDto } from './dto/query-params.dto';
+import { QueryParamsDto, UserCreateQueryDto } from './dto/query-params.dto';
 import { IdDto } from './dto/id.dto';
 import { UserDto } from './dto/user.dto';
 
@@ -23,14 +23,26 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiOperation({
+    summary: 'Add new user',
+  })
+  @Get('addUser')
+  addNewUser(
+    @Query() newUser: UserCreateQueryDto
+  ): Promise<string> {
+    return this.usersService.addUser(newUser);
+  }
+
+  @ApiOperation({
     summary: 'Based on query params, you can obtain list of users ids',
     description: 'Obtain list of user ids',
   })
   @ApiBadRequestResponse({
     description: 'Bad request - incorrect query params',
   })
-  @Get()
-  findAll(@Query() queryParamsDto?: QueryParamsDto): Promise<IdDto[]> {
+  @Get('getUsers')
+  findAll(
+    @Query() queryParamsDto?: QueryParamsDto
+  ): Promise<IdDto[]> {
     return this.usersService.findAllUsers(queryParamsDto);
   }
 
