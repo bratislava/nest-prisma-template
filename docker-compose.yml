@@ -1,39 +1,34 @@
-# for prod with migrated db change target to prod and command to npm run start:migrate:prod
 version: '3.8'
 services:
-  nest:
+  app:
     depends_on:
-      - postgresql
-    container_name: 'nest-template'
+      - database
     build:
       context: .
       target: dev
     env_file:
       - .env
     environment:
-      PORT: 3000
+      PORT: 3001
       DEBUG_HOST: 0.0.0.0:9229
-      DATABASE_URL: postgresql://user:pass@postgres_db:54320/mydb?schema=public&connect_timeout=30
+      DATABASE_URL: postgresql://user:pass@database:54320/postgres?schema=public&connect_timeout=30
     command: npm run start:debug
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:3001:3001"
       - "127.0.0.1:9229:9229"
     volumes:
       - ./:/home/node/app
 
-  postgresql:
+  database:
     image: postgres:13
-    container_name: 'postgres_db'
     restart: always
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
-      POSTGRES_DB: mydb
+      POSTGRES_DB: postgres
       PGPORT: 54320
     expose:
       - '54320'
-    ports:
-      - '54320:54320'
     volumes:
       - postgres:/var/lib/postgresql/data
 

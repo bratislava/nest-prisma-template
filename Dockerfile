@@ -13,15 +13,14 @@ ENTRYPOINT [ "/sbin/tini", "--" ]
 
 FROM base AS build-base
 WORKDIR /build
-COPY package.json package-lock.json ./
-COPY prisma ./prisma/
-RUN npm ci --omi=dev --frozen-lockfile
+COPY package.json package-lock.json prisma ./
+RUN npm ci --omit=dev --frozen-lockfile \
+ && npx prisma generate
 
 FROM build-base AS build
 COPY --chown=node:node . ./
-RUN npx prisma generate
-RUN npm run build
 
+RUN npm run build
 FROM build-base AS dev-build
 RUN npm install --development
 
