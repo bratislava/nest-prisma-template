@@ -19,8 +19,8 @@ RUN npm ci --omit=dev --frozen-lockfile \
 
 FROM build-base AS build
 COPY --chown=node:node . ./
-
 RUN npm run build
+
 FROM build-base AS dev-build
 RUN npm install --development
 
@@ -33,7 +33,6 @@ CMD [ "npm", "run", "start:debug" ]
 FROM app-base AS prod
 COPY --chown=node:node --from=build /build/package.json /build/package-lock.json ./
 COPY --chown=node:node --from=build /build/node_modules ./node_modules
-# RUN npm prune --production
 COPY --chown=node:node --from=build /build/dist ./dist
 COPY --chown=node:node --from=build /build/prisma ./prisma
 COPY --chown=node:node nest-cli.json ./nest-cli.json
