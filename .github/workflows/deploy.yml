@@ -40,6 +40,7 @@ jobs:
       url: https://tkg.staging.bratislava.sk
       flag: --staging
       debug: --debug
+      version: beta
     secrets:
       service-account: ${{ secrets.STAGING_STANDALONE_TOKEN }}
       registry-pass: ${{ secrets.HARBOR_REGISTRY_PASSWORD }}
