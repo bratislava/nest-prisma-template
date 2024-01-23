@@ -213,7 +213,6 @@ If you want to check if your secret is there, you can run this command:
 kubectl get secret --namespace=standalone nest-prisma-template-database-secret
 ```
 
-
 #### Database convention naming
 
 Please use our services as database name and user the project slug. In this case, we will use `nest-prisma-template`. And for passwords, use at least 16 characters long pass with random chars.
