@@ -246,9 +246,6 @@ GRANT ALL ON SCHEMA public TO "nest-forms-backend";
 GRANT ALL ON SCHEMA public TO public;
 ```
 
-
-
-
 ## Stay in touch
 
 - Website - [https://inovacie.bratislava.sk/](https://inovacie.bratislava.sk/)
