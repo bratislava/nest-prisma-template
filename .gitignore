@@ -33,13 +33,4 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-
-/coverage-e2e
-/test-suites
-test-report.xml
-eslint-report.json
 .env
-.env.test
-.env.local
-.scannerwork
-
