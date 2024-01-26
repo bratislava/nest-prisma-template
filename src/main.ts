@@ -1,11 +1,9 @@
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable pii/no-email */
-import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import AppModule from './app.module'
+import { ValidationPipe } from '@nestjs/common'
 
 async function bootstrap(): Promise<void> {
   const port = process.env.PORT || 3000
@@ -41,6 +39,4 @@ async function bootstrap(): Promise<void> {
   console.log(`Nest is running on port: ${port}`)
 }
 
-// eslint-disable-next-line unicorn/prefer-top-level-await
-// eslint-disable-next-line @typescript-eslint/no-floating-promises, unicorn/prefer-top-level-await
 bootstrap()
