@@ -1,4 +1,4 @@
-name: Nest deploy pipeline
+name: Validate and Deploy
 on:
   push:
     tags:
@@ -7,11 +7,19 @@ on:
       - 'prod**'
     branches:
       - master
-
+  pull_request:
+    branches:
+      - master
 jobs:
+  validate:
+    name: Validate code
+    uses: bratislava/github-actions/.github/workflows/validate-nest-prisma.yml@stable
+
   conditions:
     name: Check for cluster conditions
+    needs: validate
     uses: bratislava/github-actions/.github/workflows/cluster-deploy-conditions-simple.yml@stable
+    permissions: write-all
 
   deploy-dev:
     name: Deploy to dev
@@ -19,32 +27,35 @@ jobs:
     needs: conditions
     uses: bratislava/github-actions/.github/workflows/deploy-with-bratiska-cli.yml@beta
     with:
+      namespace: municipal-police
       directory: ./
       cluster: tkg-innov-dev
       url: https://tkg.dev.bratislava.sk
       debug: --debug
       version: beta
     secrets:
-      service-account: ${{ secrets.DEV_STANDALONE_TOKEN }}
+      service-account: ${{ secrets.DEV_MUNICIPAL_POLICE_TOKEN }}
       registry-pass: ${{ secrets.HARBOR_REGISTRY_PASSWORD }}
       sentry-token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+    permissions: write-all
 
   deploy-staging:
     name: Deploy to staging
     if: needs.conditions.outputs.staging == 'true'
     needs: [conditions]
-    uses: bratislava/github-actions/.github/workflows/deploy-with-bratiska-cli.yml@beta
+    uses: bratislava/github-actions/.github/workflows/deploy-with-bratiska-cli.yml@stable
     with:
+      namespace: municipal-police
       directory: ./
       cluster: tkg-innov-staging
       url: https://tkg.staging.bratislava.sk
       flag: --staging
       debug: --debug
-      version: beta
     secrets:
-      service-account: ${{ secrets.STAGING_STANDALONE_TOKEN }}
+      service-account: ${{ secrets.STAGING_MUNICIPAL_POLICE_TOKEN }}
       registry-pass: ${{ secrets.HARBOR_REGISTRY_PASSWORD }}
       sentry-token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+    permissions: write-all
 
   deploy-prod:
     name: Deploy to prod
@@ -52,11 +63,13 @@ jobs:
     needs: [conditions]
     uses: bratislava/github-actions/.github/workflows/deploy-with-bratiska-cli.yml@stable
     with:
+      namespace: municipal-police
       directory: ./
       cluster: tkg-innov-prod
       url: https://tkg.bratislava.sk
       flag: --production
     secrets:
-      service-account: ${{ secrets.PROD_STANDALONE_TOKEN }}
+      service-account: ${{ secrets.PROD_MUNICIPAL_POLICE_TOKEN }}
       registry-pass: ${{ secrets.HARBOR_REGISTRY_PASSWORD }}
       sentry-token: ${{ secrets.SENTRY_AUTH_TOKEN }}
+    permissions: write-all
