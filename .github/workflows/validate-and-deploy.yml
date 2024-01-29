@@ -27,14 +27,13 @@ jobs:
     needs: conditions
     uses: bratislava/github-actions/.github/workflows/deploy-with-bratiska-cli.yml@beta
     with:
-      namespace: standalone
       directory: ./
       cluster: tkg-innov-dev
       url: https://tkg.dev.bratislava.sk
       debug: --debug
       version: beta
     secrets:
-      service-account: ${{ secrets.DEV_MUNICIPAL_POLICE_TOKEN }}
+      service-account: ${{ secrets.DEV_STANDALONE_TOKEN }}
       registry-pass: ${{ secrets.HARBOR_REGISTRY_PASSWORD }}
       sentry-token: ${{ secrets.SENTRY_AUTH_TOKEN }}
     permissions: write-all
@@ -45,14 +44,14 @@ jobs:
     needs: [conditions]
     uses: bratislava/github-actions/.github/workflows/deploy-with-bratiska-cli.yml@stable
     with:
-      namespace: standalone
       directory: ./
       cluster: tkg-innov-staging
       url: https://tkg.staging.bratislava.sk
       flag: --staging
       debug: --debug
+      version: beta
     secrets:
-      service-account: ${{ secrets.STAGING_MUNICIPAL_POLICE_TOKEN }}
+      service-account: ${{ secrets.STAGING_STANDALONE_TOKEN }}
       registry-pass: ${{ secrets.HARBOR_REGISTRY_PASSWORD }}
       sentry-token: ${{ secrets.SENTRY_AUTH_TOKEN }}
     permissions: write-all
@@ -63,13 +62,13 @@ jobs:
     needs: [conditions]
     uses: bratislava/github-actions/.github/workflows/deploy-with-bratiska-cli.yml@stable
     with:
-      namespace: standalone
       directory: ./
       cluster: tkg-innov-prod
       url: https://tkg.bratislava.sk
       flag: --production
+      debug: --debug
     secrets:
-      service-account: ${{ secrets.PROD_MUNICIPAL_POLICE_TOKEN }}
+      service-account: ${{ secrets.PROD_STANDALONE_TOKEN }}
       registry-pass: ${{ secrets.HARBOR_REGISTRY_PASSWORD }}
       sentry-token: ${{ secrets.SENTRY_AUTH_TOKEN }}
     permissions: write-all
