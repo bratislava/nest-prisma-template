@@ -11,6 +11,10 @@ on:
     branches:
       - master
 jobs:
+  version:
+    name: Pipeline version
+    uses: bratislava/github-actions/.github/workflows/pipeline-version.yml@beta
+
   validate:
     name: Validate code
     uses: bratislava/github-actions/.github/workflows/validate-nest-prisma.yml@beta
