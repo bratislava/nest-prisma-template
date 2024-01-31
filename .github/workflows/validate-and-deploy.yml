@@ -13,12 +13,12 @@ on:
 jobs:
   validate:
     name: Validate code
-    uses: bratislava/github-actions/.github/workflows/validate-nest-prisma.yml@stable
+    uses: bratislava/github-actions/.github/workflows/validate-nest-prisma.yml@beta
 
   conditions:
     name: Check for cluster conditions
     needs: validate
-    uses: bratislava/github-actions/.github/workflows/cluster-deploy-conditions-simple.yml@stable
+    uses: bratislava/github-actions/.github/workflows/cluster-deploy-conditions-simple.yml@beta
     permissions: write-all
 
   deploy-dev:
