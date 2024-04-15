@@ -3,7 +3,7 @@ ENV NODE_ENV=production
 
 FROM base AS app-base
 RUN apk update \
- && apk add tini\
+ && apk add tini \
  && rm -rf /var/cache/apk/* \
  && mkdir -p /home/node/app \
  && chown -R node:node /home/node/app
@@ -14,19 +14,17 @@ ENTRYPOINT [ "/sbin/tini", "--" ]
 FROM base AS build-base
 WORKDIR /build
 COPY package.json package-lock.json prisma ./
-RUN npm ci --omit=dev --frozen-lockfile \
+RUN npm ci --include=dev --frozen-lockfile \
  && npx prisma generate
 
 FROM build-base AS build
 COPY --chown=node:node . ./
-RUN npm run build
-
-FROM build-base AS dev-build
-RUN npm install --development
+RUN npm run build \
+ && npm prune --production
 
 FROM app-base AS dev
 ENV NODE_ENV=development
-COPY --chown=node:node --from=dev-build /build/node_modules ./node_modules
+# used **only** for development and local directory should be mounted
 CMD [ "npm", "run", "start:debug" ]
 
 # production
