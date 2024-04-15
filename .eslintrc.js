@@ -8,6 +8,8 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     /** It's annoying to refactor from one style to another */
     'arrow-body-style': 'off',
+    /** Reduces clutter */
+    'eslint-comments/no-unused-disable': 'error',
 
 
     /** Links get confused for secrets */
