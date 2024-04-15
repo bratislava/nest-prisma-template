@@ -1,9 +1,9 @@
+import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { Response } from 'express'
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import AppModule from './app.module'
-import { ValidationPipe } from '@nestjs/common'
 
 async function bootstrap(): Promise<void> {
   const port = process.env.PORT || 3000
@@ -32,11 +32,14 @@ async function bootstrap(): Promise<void> {
 
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('api', app, document)
-  app.getHttpAdapter().get('/spec-json', (req, res) => res.json(document))
+  app
+    .getHttpAdapter()
+    .get('/spec-json', (req, res: Response) => res.json(document))
 
   await app.listen(port)
   // eslint-disable-next-line no-console
   console.log(`Nest is running on port: ${port}`)
 }
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises, unicorn/prefer-top-level-await
 bootstrap()
