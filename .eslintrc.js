@@ -26,6 +26,11 @@ module.exports = {
     /** BE often has these in boilerplate */
     'no-underscore-dangle': 'off',
 
+    /** Nested ternaries are quite hard to read and it's really easy to lose an edge case in them */
+    'no-nested-ternary': 'error',
+    /** This is similar to using const to let */
+    '@typescript-eslint/prefer-readonly':'error',
+
     // TODO: discuss these rules in nest-prisma-template repo
     'max-classes-per-file': 'off',
     'const-case/uppercase': 'off',
