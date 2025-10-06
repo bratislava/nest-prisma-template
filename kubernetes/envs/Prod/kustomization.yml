@@ -1,6 +1,5 @@
 resources:
   - ../../base
-  - scaler.yml
 generatorOptions:
   disableNameSuffixHash: true
 configMapGenerator:
